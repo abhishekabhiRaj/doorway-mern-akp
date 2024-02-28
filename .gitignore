@@ -1,0 +1,6 @@
+/backend/node_modules/
+/mobileApp/node_modules/
+/mobileApp/android/build
+/mobileApp/android/app/build
+/mobileApp/android/.gradle/
+.DS_Store
