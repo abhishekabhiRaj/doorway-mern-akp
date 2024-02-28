@@ -4,3 +4,4 @@
 /mobileApp/android/app/build
 /mobileApp/android/.gradle/
 .DS_Store
+/node_modules/
