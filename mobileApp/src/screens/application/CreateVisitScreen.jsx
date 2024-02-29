@@ -17,7 +17,7 @@ const UploadScreen = () => {
         headerShown:false
     })});
     return(
-        <View className={`${theme==="dark"&&"bg-black/[0.9]"}`} style={{display:'flex',flex:1, justifyContent:'center', alignItems:'center'}}>
+        <View className={` ${theme==="dark"&&"bg-black/[0.9]"}`} style={{display:'flex',flex:1, justifyContent:'center', alignItems:'center'}}>
             <Text className={`${theme==="dark"?"text-white/[0.6]":"text-black"}`}>Upload Page Pending...</Text>
             <TouchableOpacity>
                 <Text style={{backgroundColor:color.primaryColor, color:'#fff', padding:8, borderRadius:4, marginTop:16}} onPress={()=>navigation.navigate('Home')}>Go Back To Home </Text>

@@ -4,7 +4,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import { color } from '../style/color';
 import HomeScreen from '../screens/application/HomeScreen';
 import SettingScreen from '../screens/application/SettingScreen';
-import UploadScreen from '../screens/application/UploadScreen';
+import CreateVisitScreen from '../screens/application/CreateVisitScreen';
 import VisitorDetailScreen from '../screens/application/VisitorDetailScreen';
 import { commonDarkStyle, commonStyle } from '../style/style';
 import { useEffect, useState } from 'react';
@@ -60,7 +60,7 @@ const Tabs = () => {
                     )
                 }
             }}
-            name="Upload" component={UploadScreen} />
+            name="CreateVisit" component={CreateVisitScreen} />
             <Tab.Screen
             options={{
                 tabBarIcon:({focused})=>{
@@ -137,7 +137,7 @@ const Tabs = () => {
                             )
                         }
                     }}
-                    name="Upload" component={UploadScreen} />
+                    name="CreateVisit" component={CreateVisitScreen} />
                     <Tab.Screen
                     options={{
                         tabBarIcon:({focused})=>{
