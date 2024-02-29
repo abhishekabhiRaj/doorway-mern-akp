@@ -67,51 +67,37 @@ const storyData = [
     },[theme]);
     return(
       <View className={`w-full mb-4 rounded-xl p-4 ${theme === "dark"?"bg-black":"bg-white"}`}>
+         <TouchableOpacity onPress={()=>navigation.navigate('PostDetail')}>
       <View className="flex-row justify-between items-center">
         <View className="flex-row items-center">
-          <Image className="w-10 h-10 rounded-full" source={require('../../assets/images/profile/img4.png')} />
+          <Image className="w-16 h-16 rounded-lg" source={require('../../assets/images/visitors/img1.png')} />
           <View className="mx-2">
             <Text className={`font-black ${theme=== "dark"?"text-white/[0.7]":"text-black"}`}>Abhishek</Text>
-            <View className="flex-row items-center">
+            <View className="">
               {/* location */}
-              <Text className={`text-xs mr-2 ${theme=== "dark"?"text-white/[0.7]":"text-black"}`}>Gaya</Text>
+              <Text className={`text-xs mr-2 ${theme=== "dark"?"text-white/[0.7]":"text-black"}`}>To Meet : Sujit Kumar Shaw</Text>
               {/* post time */}
-              <Text className={`text-xs mr-2 ${theme=== "dark"?"text-white/[0.7]":"text-black"}`}>1 min ago</Text>
-              <Feather
-                  color={theme=== "dark"&&"#fff"}
-                  name="globe"
-                  size={12}
-              />
+              <Text className={`text-xs mr-2 ${theme=== "dark"?"text-white/[0.7]":"text-black"}`}>Purpose : Testing</Text>
             </View>
           </View>
         </View>
-        <View>
-          <Text>
-            <Feather
-                  name="more-horizontal"
-                  size={20}
-                  color={theme=== "dark"&&"#fff"}
-              />
-          </Text>
-        </View>
-      </View>
-      <TouchableOpacity onPress={()=>navigation.navigate('PostDetail')}>
-      <View className="mt-2">
-        <Image className="w-full h-52 rounded-xl" source={require('../../assets/images/posts/post2.png')} />
-      </View>
-      <View className="mt-2">
-      <Text >
-          <Text className={`font-black ${theme=== "dark"?"text-white/[0.7]":"text-black"}`}>Abhishek   </Text>
-          <Text className={`text-black text-xs ${theme=== "dark"?"text-white/[0.7]":"text-black"}`}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley...</Text>
-        </Text>
+       
       </View>
       </TouchableOpacity>
       <View className="mt-3 mb-3" style={{borderBottomWidth:1, borderBlockColor:`${theme=== "dark"?"#27282d":gray}`}}/>
       <View className="flex-row items-center justify-between">
-          <Text className={`text-xs ${theme === "dark"?"text-white/[0.7]":"text-black"}`}><Feather name="thumbs-up" size={16} /> 200K </Text>
-          <Text className={`text-xs ${theme === "dark"?"text-white/[0.7]":"text-black"}`}><Feather name="message-square" size={16} /> 4000 </Text>
-          <Text className={`text-xs ${theme === "dark"?"text-white/[0.7]":"text-black"}`}><Feather name="repeat" size={16} /> 300</Text>
-          <Text className={`text-xs ${theme === "dark"?"text-white/[0.7]":"text-black"}`}><Feather name="share-2" size={16} /></Text>
+          <TouchableOpacity className="p-1 px-2">
+            <Text className={`text-xs ${theme === "dark"?"text-white/[0.7]":"text-black"}`}><Feather name="thumbs-up" size={16} /> </Text>
+          </TouchableOpacity>
+          <TouchableOpacity className="p-1 px-2">
+            <Text className={`text-xs ${theme === "dark"?"text-white/[0.7]":"text-black"}`}><Feather name="thumbs-down" size={16} />  </Text>
+          </TouchableOpacity>
+          <TouchableOpacity className="p-1 px-2">
+            <Text className={`text-xs ${theme === "dark"?"text-white/[0.7]":"text-black"}`}><Feather name="eye" size={16} /></Text>
+          </TouchableOpacity>
+          <TouchableOpacity className="p-1 px-2">
+            <Text className={`text-xs ${theme === "dark"?"text-white/[0.7]":"text-black"}`}><Feather name="printer" size={16} /></Text>
+          </TouchableOpacity>
       </View>
     </View>
     )
@@ -156,10 +142,6 @@ const HomeScreen = () => {
         {/* /Top Bar */}
 
         
-
-        {/* Posts */}
-        <ScrollView showsVerticalScrollIndicator={false}>
-          {/* Story */}
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View className="flex-row mb-2 mt-2 p-4 pt-1 pb-0">
             <TouchableOpacity className="mr-3" onPress={()=>setActiveTab(0)}>
@@ -180,11 +162,41 @@ const HomeScreen = () => {
             </TouchableOpacity>
           </View>
         </ScrollView>
-        {/* /Story */}
+
+        {/* Posts */}
+        <ScrollView showsVerticalScrollIndicator={false}>
+        {/* Tabs  */}
           <View className="mb-48 p-4 pt-2">
-            <VisitCard/>
-            <VisitCard/>
+            {
+              activeTab === 0 && 
+              <View>
+                <VisitCard/>
+                <VisitCard/>
+              </View>
+            }
+            {
+              activeTab === 1 && 
+              <View>
+                <VisitCard/>
+                <VisitCard/>
+              </View>
+            }
+            {
+              activeTab === 2 && 
+              <View>
+                <VisitCard/>
+                <VisitCard/>
+              </View>
+            }
+            {
+              activeTab === 3 && 
+              <View>
+                <VisitCard/>
+                <VisitCard/>
+              </View>
+            }
           </View>
+        {/* Tabs  */}
         </ScrollView>
         {/* /Posts */}
       </View>
