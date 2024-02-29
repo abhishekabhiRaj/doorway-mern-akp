@@ -5,6 +5,7 @@ import { color } from "../../style/color";
 import Feather from 'react-native-vector-icons/Feather';
 import { useSelector } from "react-redux";
 import { commonDarkStyle, commonStyle } from "../../style/style";
+import KeyValue from "../../components/KeyValue";
 
 
 const primaryColor = '#024f9e';
@@ -15,7 +16,9 @@ const dummuText = "Lorem Ipsum is simply dummy text of the printing and typesett
 
 
   
-const Post = () => {
+ 
+  
+const Card = () => {
   const navigation = useNavigation();
   const [defaultTheme, setDefaultTheme] = useState(commonDarkStyle);
   const theme = useSelector(state=>state.theme.value);
@@ -23,59 +26,49 @@ const Post = () => {
     setDefaultTheme(theme === 'default'? commonStyle : commonDarkStyle );
   },[theme]);
   return(
-    <View className={`w-full mb-4 rounded-xl p-4 ${theme === "dark"?"bg-black":"bg-white"}`}>
-    <View className="flex-row justify-between items-center">
-      <View className="flex-row items-center">
-        <Image className="w-10 h-10 rounded-full" source={require('../../assets/images/profile/img4.png')} />
-        <View className="mx-2">
-          <Text className={`font-black ${theme=== "dark"?"text-white/[0.7]":"text-black"}`}>Abhishek</Text>
-          <View className="flex-row items-center">
-            {/* location */}
-            <Text className={`text-xs mr-2 ${theme=== "dark"?"text-white/[0.7]":"text-black"}`}>Gaya</Text>
-            {/* post time */}
-            <Text className={`text-xs mr-2 ${theme=== "dark"?"text-white/[0.7]":"text-black"}`}>1 min ago</Text>
-            <Feather
-                color={theme=== "dark"&&"#fff"}
-                name="globe"
-                size={12}
-            />
-          </View>
+    <View className={`w-full mb-4 rounded-xl p-4  ${theme === "dark"?"bg-black":"bg-white"}`}>
+       {/* <TouchableOpacity onPress={()=>navigation.navigate('VisitDetail')}> */}
+    <View className="bg-green-500 ">
+    <View className="flex items-center">
+        <View className="mt-3">
+          <Image className="w-24 h-24 rounded-lg" source={require('../../assets/images/visitors/img1.png')} />
         </View>
+      <View className="">
+          <View className="mt-6">
+            <KeyValue title="Visitor Name" value="Abhishek Raj" />
+            <KeyValue title="Person To Meet" value="Sujit Kumar Shaw" />
+            <KeyValue title="Purpose" value="Testing" />
+            <KeyValue title="Date Of Visit" value="28/02/2024" />
+            <KeyValue title="Visit Status" value="Pending" />
+          </View>
       </View>
-      <View>
-        <Text>
-          <Feather
-                name="more-horizontal"
-                size={20}
-                color={theme=== "dark"&&"#fff"}
-            />
-        </Text>
-      </View>
     </View>
-    <View className="mt-2">
-      <Image className="w-full h-52 rounded-xl" source={require('../../assets/images/posts/post2.png')} />
+     
     </View>
-    <View className="mt-2">
-    <Text >
-        <Text className={`font-black ${theme=== "dark"?"text-white/[0.7]":"text-black"}`}>Abhishek   </Text>
-        <Text className={`text-black text-xs ${theme=== "dark"?"text-white/[0.7]":"text-black"}`}>{dummuText+dummuText}</Text>
-      </Text>
-    </View>
-    <View className="mt-3 mb-3" style={{borderBottomWidth:1, borderBlockColor:`${theme=== "dark"?"#27282d":gray}`}}/>
+    {/* </TouchableOpacity> */}
+    {/* <View className="mt-3 mb-3" style={{borderBottomWidth:1, borderBlockColor:`${theme=== "dark"?"#27282d":gray}`}}/> */}
     <View className="flex-row items-center justify-between">
-        <Text className={`text-xs ${theme === "dark"?"text-white/[0.7]":"text-black"}`}><Feather name="thumbs-up" size={16} /> 200K </Text>
-        <Text className={`text-xs ${theme === "dark"?"text-white/[0.7]":"text-black"}`}><Feather name="message-square" size={16} /> 4000 </Text>
-        <Text className={`text-xs ${theme === "dark"?"text-white/[0.7]":"text-black"}`}><Feather name="repeat" size={16} /> 300</Text>
-        <Text className={`text-xs ${theme === "dark"?"text-white/[0.7]":"text-black"}`}><Feather name="share-2" size={16} /></Text>
+        <TouchableOpacity className="p-1 px-2">
+          <Text className={`text-xs ${theme === "dark"?"text-white/[0.7]":"text-black"}`}><Feather name="thumbs-up" size={16} /> </Text>
+        </TouchableOpacity>
+        <TouchableOpacity className="p-1 px-2">
+          <Text className={`text-xs ${theme === "dark"?"text-white/[0.7]":"text-black"}`}><Feather name="thumbs-down" size={16} />  </Text>
+        </TouchableOpacity>
+        <TouchableOpacity className="p-1 px-2">
+          <Text className={`text-xs ${theme === "dark"?"text-white/[0.7]":"text-black"}`}><Feather name="eye" size={16} /></Text>
+        </TouchableOpacity>
+        <TouchableOpacity className="p-1 px-2">
+          <Text className={`text-xs ${theme === "dark"?"text-white/[0.7]":"text-black"}`}><Feather name="printer" size={16} /></Text>
+        </TouchableOpacity>
     </View>
   </View>
   )
 }
 
 
-  
 
-const PostDetailScreen = () => {
+
+const VisitorDetailScreen = () => {
     const navigation = useNavigation();
     const [defaultTheme, setDefaultTheme] = useState(commonDarkStyle);
     const theme = useSelector(state=>state.theme.value);
@@ -85,7 +78,7 @@ const PostDetailScreen = () => {
     useLayoutEffect(()=>{
         navigation.setOptions({
             headerShown: false,
-            headerTitle : "Post Detail",
+            headerTitle : "Visit Detail",
             headerLeft:()=>(<TouchableOpacity
                 onPress={() => navigation.navigate('Home')}
                 style={{padding:18, paddingRight:4}}>
@@ -111,13 +104,13 @@ const PostDetailScreen = () => {
                 size={16}
                 color={theme === "dark" ? "#f5f5f5" : "#000"}
               /></TouchableOpacity>
-              <Text className={`mx-3 text-xl ${theme === "dark"?"text-white/[0.8]":"text-black"}`}>Post Detail</Text>
+              <Text className={`mx-3 text-xl ${theme === "dark"?"text-white/[0.8]":"text-black"}`}>Visitor Detail</Text>
           </View>
             <View className="p-4">
-            <Post/>
+              <Card/>
             </View>
         </View>
     )
 }
 
-export default PostDetailScreen;
+export default VisitorDetailScreen;

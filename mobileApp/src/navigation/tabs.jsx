@@ -5,7 +5,7 @@ import { color } from '../style/color';
 import HomeScreen from '../screens/application/HomeScreen';
 import SettingScreen from '../screens/application/SettingScreen';
 import UploadScreen from '../screens/application/UploadScreen';
-import PostDetailScreen from '../screens/application/PostDetailScreen';
+import VisitorDetailScreen from '../screens/application/VisitorDetailScreen';
 import { commonDarkStyle, commonStyle } from '../style/style';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -94,7 +94,7 @@ const Tabs = () => {
                     )
                 }
             }}
-            name="PostDetail" component={PostDetailScreen} />
+            name="VisitDetail" component={VisitorDetailScreen} />
         </Tab.Navigator> 
     )
         }else{
@@ -171,7 +171,7 @@ const Tabs = () => {
                             )
                         }
                     }}
-                    name="PostDetail" component={PostDetailScreen} />
+                    name="VisitDetail" component={VisitorDetailScreen} />
                 </Tab.Navigator> 
             )
         }

@@ -5,9 +5,10 @@ module.exports = {
     "./src/navigation/tabs.jsx",
     "./src/components/Topbar.jsx",
     "./src/screens/application/HomeScreen.jsx",
-    "./src/screens/application/PostDetailScreen.jsx",
+    "./src/screens/application/VisitorDetailScreen.jsx",
     "./src/screens/application/UploadScreen.jsx",
     "./src/screens/application/SettingScreen.jsx",
+    "./src/components/KeyValue.jsx",
   ],
   theme: {
     extend: {},

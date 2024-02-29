@@ -67,7 +67,7 @@ const storyData = [
     },[theme]);
     return(
       <View className={`w-full mb-4 rounded-xl p-4 ${theme === "dark"?"bg-black":"bg-white"}`}>
-         <TouchableOpacity onPress={()=>navigation.navigate('PostDetail')}>
+         <TouchableOpacity onPress={()=>navigation.navigate('VisitDetail')}>
       <View className="flex-row justify-between items-center">
         <View className="flex-row items-center">
           <Image className="w-16 h-16 rounded-lg" source={require('../../assets/images/visitors/img1.png')} />
