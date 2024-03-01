@@ -7,6 +7,11 @@ import { commonDarkStyle, commonStyle } from '../../style/style';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+// library for camera 
+import {launchCamera} from 'react-native-image-picker';
+// library for camera gallery
+import {launchImageLibrary} from 'react-native-image-picker';
+// library for file picker
 import DocumentPicker from 'react-native-document-picker';
 import RNFS from 'react-native-fs';
 
@@ -24,6 +29,30 @@ const CreateVisitScreen = () => {
             headerShown: false,
         });
     });
+    const [selectedImage, setSelectedImage] = useState(null);
+
+
+    // 
+    const handleCameraLaunch = () => {
+        const options = {
+          mediaType: 'photo',
+          includeBase64: false,
+          maxHeight: 2000,
+          maxWidth: 2000,
+        };
+      
+        launchCamera(options, response => {
+          if (response.didCancel) {
+            console.log('User cancelled camera');
+          } else if (response.error) {
+            console.log('Camera Error: ', response.error);
+          } else {
+            let imageUri = response.uri || response.assets?.[0]?.uri;
+            setSelectedImage(imageUri);
+            console.log(imageUri);
+          }
+        });
+      }
 
     // file upload code
     const [selectedFile, setSelectedFile] = useState(null);
@@ -196,9 +225,7 @@ const CreateVisitScreen = () => {
                     )}
                     {formSteps == 1 &&
                         <View>
-                        <Button title="Pick Document" onPress={pickDocument} />
-                        {selectedFile && <Text>Selected File: {selectedFile.name}</Text>}
-                        <Button title="Upload File" onPress={uploadFile} />
+                            <Text className="text-black" onPress={()=>handleCameraLaunch()}>Open Camera</Text>
                       </View>
                     }
                     {formSteps == 2 && <Text className="text-black">Step 3</Text>}
