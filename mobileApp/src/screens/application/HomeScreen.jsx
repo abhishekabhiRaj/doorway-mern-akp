@@ -172,6 +172,12 @@ const HomeScreen = () => {
               <View>
                 <VisitCard/>
                 <VisitCard/>
+                <VisitCard/>
+                <VisitCard/>
+                <VisitCard/>
+                <VisitCard/>
+                <VisitCard/>
+                <VisitCard/>
               </View>
             }
             {
