@@ -13,6 +13,7 @@ import com.facebook.react.flipper.ReactNativeFlipper
 import com.facebook.soloader.SoLoader
 import com.oblador.vectoricons.VectorIconsPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
+import com.horcrux.svg.SvgPackage;
 
 class MainApplication : Application(), ReactApplication {
 
