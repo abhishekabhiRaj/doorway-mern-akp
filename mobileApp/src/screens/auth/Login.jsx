@@ -9,10 +9,12 @@ import { color } from '../../style/color';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { baseUrl } from '../../_api/api';
+import { MMKVLoader, useMMKVStorage } from 'react-native-mmkv-storage';
 
 
-
+const storage = new MMKVLoader().initialize();
 const Login = () => {
+  const [user, setUser] = useMMKVStorage('user', storage, 'robert');
   const navigation = useNavigation();
   const [defaultTheme, setDefaultTheme] = useState(commonStyle);
   const theme = useSelector(state=>state.theme.value);
@@ -39,7 +41,7 @@ useEffect(()=>{
     password: yup
       .string()
       .required('Password is required')
-      .min(8, 'Password must contain at least 8 characters'),
+      .min(6, 'Password must contain at least 6 characters'),
   });
 
   const {
@@ -61,10 +63,9 @@ useEffect(()=>{
       'Accept': 'application/json',
       }})
     .then(res=>{
-
       if(res.data.status == 200){
-        navigation.navigate('Dashboard')
-        // dispatch(setUser(res.data.user))
+        navigation.navigate('Application')
+        dispatch(setUser(res.data.user))
       }else{
         console.warn(res.data.message)
       }
