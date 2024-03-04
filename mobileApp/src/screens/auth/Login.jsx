@@ -7,6 +7,8 @@ import * as yup from 'yup';
 import { useNavigation } from '@react-navigation/native';
 import { color } from '../../style/color';
 import { useSelector } from 'react-redux';
+import axios from 'axios';
+import { baseUrl } from '../../_api/api';
 
 
 
@@ -24,7 +26,7 @@ const Login = () => {
 },[])
 
 useEffect(()=>{
-  console.log(defaultTheme);
+  // console.log(defaultTheme);
 },[defaultTheme])
 
 
@@ -48,22 +50,28 @@ useEffect(()=>{
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      email: 'ryabhishek@yahoo.com',
-      password: 'ASAJSSJSJSS',
+      email: '',
+      password: '',
     },
   });
   const signIn = (data) => {
-    navigation.navigate('Application');
-    // axios.post(baseUrl+'login', data)
-    // .then(res=>{
-    //   if(res.data.status == 200){
-    //     navigation.navigate('Dashboard')
-    //     dispatch(setUser(res.data.user))
-    //   }else{
-    //     console.error(res.data.message)
-    //   }
-    // })
+    axios.post( baseUrl + 'login', data, {
+      headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      }})
+    .then(res=>{
+
+      if(res.data.status == 200){
+        navigation.navigate('Dashboard')
+        // dispatch(setUser(res.data.user))
+      }else{
+        console.warn(res.data.message)
+      }
+    })
+    .catch(err=> console.warn(err));
   }
+   
 
   return(
     <View
@@ -99,7 +107,7 @@ useEffect(()=>{
                 ...defaultTheme.defaultMarginBottom,
                 ...defaultTheme.defaultColor,
               }}
-              value={'ryabhishek@yahoo.com'}
+              // value={'ryabhishek@yahoo.com'}
               onChangeText={onChange}
               placeholder="Email"
               placeholderTextColor="gray"
@@ -122,7 +130,7 @@ useEffect(()=>{
                 ...defaultTheme.defaultMarginBottom,
                 ...defaultTheme.defaultColor,
               }}
-              value={'ASAJSSJSJSS'}
+              // value={'ASAJSSJSJSS'}
               onChangeText={onChange}
               placeholder="Password"
               placeholderTextColor="gray"

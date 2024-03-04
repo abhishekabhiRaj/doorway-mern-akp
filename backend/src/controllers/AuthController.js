@@ -52,12 +52,13 @@ var registerController = async (req, res) => {
 
 // controller for login function calling in auth.js
 var loginController = async (req, res) => {
-    console.log(req.body)
+    console.log('Api called');
     const {
-        username,
+        email,
         password
     } = req.body;
-    const user = await  UserModel.findOne({ username });
+    const user = await  UserModel.findOne({ email });
+    
     if (user) {
         if (user.password == password) {
             res.json({

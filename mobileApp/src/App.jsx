@@ -14,6 +14,7 @@ import { store } from './app/store'
 import SplashScreen from 'react-native-splash-screen'
 import Welcome from './screens/auth/Welcome';
 import Application from './screens/application/Application';
+import axios from 'axios';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,9 +25,7 @@ const App = () => {
     if(Platform.OS === 'android'){
       SplashScreen.hide();
     }
-  },[])
-
- 
+  },[]);
 
   return (
     <Provider store={store}>
