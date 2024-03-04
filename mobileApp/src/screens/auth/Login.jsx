@@ -14,7 +14,7 @@ import { MMKVLoader, useMMKVStorage } from 'react-native-mmkv-storage';
 
 const storage = new MMKVLoader().initialize();
 const Login = () => {
-  const [user, setUser] = useMMKVStorage('user', storage, 'robert');
+  const [token, setToken] = useMMKVStorage('token', storage);
   const navigation = useNavigation();
   const [defaultTheme, setDefaultTheme] = useState(commonStyle);
   const theme = useSelector(state=>state.theme.value);
@@ -22,14 +22,13 @@ const Login = () => {
     setDefaultTheme(theme === 'default'? commonStyle : commonDarkStyle );
   },[theme]);
   useLayoutEffect(()=>{
+    setToken();
     navigation.setOptions({
         headerShown:false
     })
 },[])
 
-useEffect(()=>{
-  // console.log(defaultTheme);
-},[defaultTheme])
+
 
 
 
@@ -64,14 +63,17 @@ useEffect(()=>{
       }})
     .then(res=>{
       if(res.data.status == 200){
-        navigation.navigate('Application')
-        dispatch(setUser(res.data.user))
+        navigation.navigate('Application');
+        setToken(res.data.token);
+        // dispatch(setUser(res.data.user))
       }else{
         console.warn(res.data.message)
       }
     })
     .catch(err=> console.warn(err));
   }
+
+  useEffect (()=> {console.log(token)}, [token])
    
 
   return(

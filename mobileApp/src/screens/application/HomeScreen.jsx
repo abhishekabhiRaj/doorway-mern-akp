@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Feather from 'react-native-vector-icons/Feather';
 import { useSelector } from "react-redux";
 import { commonDarkStyle, commonStyle } from "../../style/style";
+import { MMKVLoader, useMMKVStorage } from "react-native-mmkv-storage";
 
 
 
@@ -105,9 +106,12 @@ const storyData = [
   
 
   
+  const storage = new MMKVLoader().initialize();
 
 const HomeScreen = () => {
     const navigation = useNavigation();
+    const [token, setToken] = useMMKVStorage('token', storage);
+
     const [defaultTheme, setDefaultTheme] = useState(commonDarkStyle);
     const [activeTab, setActiveTab] = useState(0);
     const theme = useSelector(state=>state.theme.value);
@@ -119,6 +123,10 @@ const HomeScreen = () => {
         headerShown:false,
     })});
 
+  useEffect(()=>{
+    console.log('storage', storage)
+  },[storage]);
+
 
     return(
         <SafeAreaView>
@@ -128,7 +136,7 @@ const HomeScreen = () => {
           <Image
             className="h-8 w-16"
             source={require('../../assets/images/logo.png')} />
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>console.log('tttt',token)}>
             <View className={`${theme==="dark"?"bg-white/[0.2]":"bg-gray-300"} rounded-full w-8 h-8 flex-row items-center justify-center relative mr-1`}>
               <View className="w-2 h-2 bg-red-500 absolute rounded-full top-0 right-0"></View>
               <Feather

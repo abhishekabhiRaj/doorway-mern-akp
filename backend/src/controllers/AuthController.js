@@ -1,4 +1,5 @@
 import { UserModel } from '../models/UserModel.js';
+import jsonwebtoken from 'jsonwebtoken';
 
 // controller for login function calling in auth.js
 var registerController = async (req, res) => {
@@ -61,9 +62,12 @@ var loginController = async (req, res) => {
     
     if (user) {
         if (user.password == password) {
+            const token = jsonwebtoken.sign({ email:email, usertype:user.usertype }, 'secret');
+            console.log(token);
             res.json({
                 message: "Successfully logged in",
                 status: 200,
+                token:token
             });
         } else {
             res.json({
