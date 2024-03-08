@@ -111,7 +111,6 @@ const storyData = [
 const HomeScreen = () => {
     const navigation = useNavigation();
     const [token, setToken] = useMMKVStorage('token', storage);
-
     const [defaultTheme, setDefaultTheme] = useState(commonDarkStyle);
     const [activeTab, setActiveTab] = useState(0);
     const theme = useSelector(state=>state.theme.value);
@@ -124,8 +123,8 @@ const HomeScreen = () => {
     })});
 
   useEffect(()=>{
-    console.log('storage', storage)
-  },[storage]);
+    console.log("Home",token)
+  },[token]);
 
 
     return(

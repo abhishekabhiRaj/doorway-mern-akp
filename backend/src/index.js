@@ -21,5 +21,5 @@ app.use('/', authRouter);
 app.use('/', visitorRouter);
 
 app.listen(8080, ()=>{
-    console.log('Server is running on port 8081');
+    console.log('Server is running on port 8080');
 });

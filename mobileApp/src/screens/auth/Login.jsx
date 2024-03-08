@@ -9,12 +9,10 @@ import { color } from '../../style/color';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { baseUrl } from '../../_api/api';
-import { MMKVLoader, useMMKVStorage } from 'react-native-mmkv-storage';
+import { useStorage } from '../../_local_storage/mmkv';
 
-
-const storage = new MMKVLoader().initialize();
 const Login = () => {
-  const [token, setToken] = useMMKVStorage('token', storage);
+  const [token, setToken] = useStorage("token", null);
   const navigation = useNavigation();
   const [defaultTheme, setDefaultTheme] = useState(commonStyle);
   const theme = useSelector(state=>state.theme.value);
@@ -22,15 +20,11 @@ const Login = () => {
     setDefaultTheme(theme === 'default'? commonStyle : commonDarkStyle );
   },[theme]);
   useLayoutEffect(()=>{
-    setToken();
+    // setToken();
     navigation.setOptions({
         headerShown:false
     })
 },[])
-
-
-
-
 
   const schema = yup.object().shape({
     email: yup
