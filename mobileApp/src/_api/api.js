@@ -1,6 +1,7 @@
 import axios from "axios";
-
-const baseUrl = "http://192.168.162.176:8080/";
+// 192.168.43.91
+// 192.168.66.176
+const baseUrl = "http://172.20.10.3:8080/";
 
 
 export { baseUrl };

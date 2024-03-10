@@ -61,7 +61,7 @@ const Login = () => {
         setToken(res.data.token);
         // dispatch(setUser(res.data.user))
       }else{
-        console.warn(res.data.message)
+        console.warn("Error")
       }
     })
     .catch(err=> console.warn(err));

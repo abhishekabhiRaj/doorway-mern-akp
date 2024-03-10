@@ -41,4 +41,23 @@ var createVisitorController = async (req, res) => {
     }
 };
 
-export { createVisitorController };
+var visitorListController = async (req, res) => {
+    try {
+        const visitors = await VisitorModel.find();
+        if(visitors.length > 0) {
+            return res.json({
+                data : visitors,
+                status: 200
+            });
+        }else{
+            return res.json({
+                message: "No data found",
+                status: 200
+            });
+        }
+    }catch (err) {
+        return res.json({ message: err.message, status: err.status});
+    }
+}
+
+export { createVisitorController, visitorListController };

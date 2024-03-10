@@ -53,16 +53,16 @@ var registerController = async (req, res) => {
 
 // controller for login function calling in auth.js
 var loginController = async (req, res) => {
-    console.log('Api called');
     const {
         email,
         password
     } = req.body;
     const user = await  UserModel.findOne({ email });
+    console.log(email);
     
     if (user) {
         if (user.password == password) {
-            const token = jsonwebtoken.sign({ email:email, usertype:user.usertype }, 'secret');
+            const token = jsonwebtoken.sign({ email:email, usertype:user.usertype }, 'secret', { expiresIn: '300sec' });
             console.log(token);
             res.json({
                 message: "Successfully logged in",
@@ -77,7 +77,7 @@ var loginController = async (req, res) => {
         }
     } else {
         res.json({
-            message: "Invalid username",
+            message: "Invalid email",
             status: 401
         })
     }
