@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { commonDarkStyle, commonStyle } from "../../style/style";
 import axios from "axios";
 import { baseUrl } from "../../_api/api";
-import { useStorage } from "../../_local_storage/mmkv";
+import { useStorage } from "../../_hook/useStorage";
 import { jwt_decode } from "jwt-decode-es";
 import moment from "moment";
 

@@ -9,7 +9,7 @@ import { color } from '../../style/color';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { baseUrl } from '../../_api/api';
-import { useStorage } from '../../_local_storage/mmkv';
+import { useStorage } from '../../_hook/useStorage';
 
 const Login = () => {
   const [token, setToken] = useStorage("token", null);

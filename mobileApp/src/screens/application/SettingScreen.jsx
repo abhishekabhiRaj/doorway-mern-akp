@@ -5,7 +5,7 @@ import { color } from "../../style/color";
 import { useDispatch, useSelector } from "react-redux";
 import { commonDarkStyle, commonStyle } from "../../style/style";
 import { setTheme } from "../../app/features/appTheme";
-import { useStorage } from "../../_local_storage/mmkv";
+import { useStorage } from "../../_hook/useStorage";
 
 const SettingScreen = () => {
     const [token, setToken] = useStorage('token', '');
