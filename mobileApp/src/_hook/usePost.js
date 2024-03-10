@@ -3,34 +3,36 @@ import React, { useEffect, useState } from 'react';
 import { baseUrl } from '../_api/api';
 import { useStorage } from './useStorage';
 
-export const useFetch = (route) => {
+export const usePost = (route, data) => {
 	const [token, setToken] = useStorage('token', '');
 	const [data, setData] = useState([]);
 	const [pending, setPending] = useState(false);
 
-	const handleFetchData = () => {
+	const handlePostData = () => {
 		setData([]);
 		setPending(true);
-		axios
-			.get(baseUrl + route, {
-				headers: {
-					'Content-Type': 'application/json',
-					'Authorization': `Bearer ${token}`,
-				},
-			})
+		axios.post(baseUrl + route, data, {
+			headers: {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json',
+				'Authorization': `Bearer ${token}`,
+
+			}
+		})
 			.then(res => {
-				setPending(false);
 				if (res.data.status == 200) {
-					setData(res.data.data);
+					navigation.navigate('Application');
+					// setToken(res.data.token);
+					// dispatch(setUser(res.data.user))
 				} else {
-					setData([]);
+					console.warn("Error")
 				}
 			})
 			.catch(err => console.warn(err));
 	};
 	useEffect(() => {
 		if (token) {
-			handleFetchData();
+			handlePostData();
 		}
 	}, [token]);
 	return [data, pending];

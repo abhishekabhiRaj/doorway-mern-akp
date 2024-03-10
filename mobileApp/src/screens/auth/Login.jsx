@@ -54,7 +54,7 @@ const Login = () => {
       headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      }})
+      }}) 
     .then(res=>{
       if(res.data.status == 200){
         navigation.navigate('Application');

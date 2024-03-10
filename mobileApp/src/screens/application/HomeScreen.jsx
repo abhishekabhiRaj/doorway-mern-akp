@@ -130,8 +130,8 @@ const HomeScreen = () => {
   // const [vistData, setVisitData] = useState([]);
   const theme = useSelector(state => state.theme.value);
 
-  var [vistData, loading] = useFetch();
-  
+  var [vistData, loading] = useFetch('visit-list');
+   
   return (
     <SafeAreaView>
       <View className={`app-1 ${theme === 'dark' && 'bg-black/[0.9]'}`}>

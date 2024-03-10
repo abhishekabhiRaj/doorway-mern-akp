@@ -42,8 +42,10 @@ var createVisitorController = async (req, res) => {
 };
 
 var visitorListController = async (req, res) => {
+    const { visit_status } = req.query;
     try {
-        const visitors = await VisitorModel.find();
+        var visitors = null ;
+        visitors = visit_status?await VisitorModel.find():await VisitorModel.find(visit_status);
         if(visitors.length > 0) {
             return res.json({
                 data : visitors,
