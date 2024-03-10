@@ -131,37 +131,13 @@ const HomeScreen = () => {
     })
     .catch(err => console.warn(err));
   } 
-  const [decodedJWT, setDecodedJWT] = useState(null);
   useEffect(()=>{
     if(token){
       handleVisitorList();
-      let jwtDecode1 = jwt_decode(token);
-      setDecodedJWT(jwtDecode1);
     }
   },[token])
 
-  useEffect(()=>{
-    if(decodedJWT){
-      var expTime = decodedJWT.exp - decodedJWT.iat;
-    var currentDT = new Date();
-    var expDT = new Date();
-    expDT.setSeconds(expDT.getSeconds() + expTime);
-    const intervalId = setInterval(()=>{
-      console.log(moment(expDT).diff(moment()));
-      if(moment(expDT).diff(moment())>0){
-        console.log("not expired") 
-      }else{
-        console.log("expired")
-        setToken();
-        navigation.navigate('Login');
-        clearInterval(intervalId);
-      }
-    }, 5000);  
-    return () => {
-      clearInterval(intervalId);
-    };
-    }
-  },[decodedJWT])
+  
 
   return (
     <SafeAreaView>
