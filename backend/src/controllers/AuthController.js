@@ -62,7 +62,7 @@ var loginController = async (req, res) => {
     
     if (user) {
         if (user.password == password) {
-            const token = jsonwebtoken.sign({ email:email, usertype:user.usertype }, 'secret', { expiresIn: '300sec' });
+            const token = jsonwebtoken.sign({ email:email, usertype:user.usertype }, 'secret', { expiresIn: '30sec' });
             console.log(token);
             res.json({
                 message: "Successfully logged in",

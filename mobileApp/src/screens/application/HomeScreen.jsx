@@ -9,6 +9,7 @@ import axios from "axios";
 import { baseUrl } from "../../_api/api";
 import { useStorage } from "../../_local_storage/mmkv";
 import { jwt_decode } from "jwt-decode-es";
+import moment from "moment";
 
 const primaryColor = '#024f9e';
 const secondaryColor = '#74b212';
@@ -128,9 +129,9 @@ const HomeScreen = () => {
     .then(res=>{
       // console.log(res); 
     })
-    .catch(err => console.error(err));
-  }
-  const [decodedJWT, setDecodedJWT] = useState('');
+    .catch(err => console.warn(err));
+  } 
+  const [decodedJWT, setDecodedJWT] = useState(null);
   useEffect(()=>{
     if(token){
       handleVisitorList();
@@ -140,7 +141,26 @@ const HomeScreen = () => {
   },[token])
 
   useEffect(()=>{
-    console.log("decodedJWT",decodedJWT);
+    if(decodedJWT){
+      var expTime = decodedJWT.exp - decodedJWT.iat;
+    var currentDT = new Date();
+    var expDT = new Date();
+    expDT.setSeconds(expDT.getSeconds() + expTime);
+    const intervalId = setInterval(()=>{
+      console.log(moment(expDT).diff(moment()));
+      if(moment(expDT).diff(moment())>0){
+        console.log("not expired") 
+      }else{
+        console.log("expired")
+        setToken();
+        navigation.navigate('Login');
+        clearInterval(intervalId);
+      }
+    }, 5000);  
+    return () => {
+      clearInterval(intervalId);
+    };
+    }
   },[decodedJWT])
 
   return (
