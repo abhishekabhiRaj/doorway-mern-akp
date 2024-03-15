@@ -2,10 +2,11 @@ import config from '../config/index.js';
 import nodemailer from 'nodemailer';
 import Mailgen from 'mailgen';
 
-const mailer = () => {
-    // Getting 
+const mailer = (res, to, sub) => {
+    // Getting EMAIL And PASSWORD From Which Mail Will Be Sent
     const { EMAIL, PASSWORD, MAIN_URL } = config;
 
+    // Creating Mail Transporter From Nodemailer (Currently Using YAHOO Service)
     let transporter = nodemailer.createTransport({
         service: "Yahoo",
         secure: true,
@@ -15,7 +16,7 @@ const mailer = () => {
         },
     });
 
-
+    // Generating Mail Using Mailgen Library
     let MailGenerator = new Mailgen({
         theme: "default",
         product: {
@@ -24,22 +25,21 @@ const mailer = () => {
         },
     });
 
-    let response = {
-        body: {
-            name: "Abhishek Raj",
-            intro: "Hi Abhishek You visit is accepted",
-        },
-    };
+    // Creating Response For Email
+    let response = res;
 
+    // Converting To Mail
     let mail = MailGenerator.generate(response);
 
+    // Type Your Subject And Receiver's Mail And Sender's Mail
     let message = {
         from: EMAIL,
-        to: 'bcoder48@gmail.com',
-        subject: "Request Accepted",
+        to: to,
+        subject: sub,
         html: mail,
     };
 
+    // Finally Sending The Mail
     transporter
         .sendMail(message)
         .then((res) => {

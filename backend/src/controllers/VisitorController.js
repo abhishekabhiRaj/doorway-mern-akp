@@ -85,7 +85,43 @@ var visitorApprovalController = async (req, res) => {
             visitor.visit_status = approval;
             await visitor.save();
             let message = approval == 'accepted' ? 'Visit Accected' : 'Visit Rejected';
-            mailer()
+            let table = approval == 'accepted' ?
+            {
+                data: [
+                    {
+                        "Date": visitor.visit_date,
+                        "Person To Meet": visitor.ptm_name,
+                        "Person To Meet Mobile": visitor.ptm_mobile,
+                        "Visit Purpose": visitor.visitor_purpose,
+                        "Visit Address": visitor.ptm_address,
+                    },
+                ],
+                columns: {
+                    // Optionally, customize the column widths
+                    customWidth: {
+                        "Date": '20%',
+                        "Person To Meet": '20%',
+                        "Person To Meet Mobile": '20%',
+                        "Visit Purpose": '20%',
+                        "Visit Address": '20%',
+                    },
+                    // Optionally, change column text alignment
+                    customAlignment: {
+                        price: 'right'
+                    }
+                }
+            }:false;
+            var response = {
+                body: {
+                    name: "Abhishek Raj",
+                    intro: approval == 'accepted' ? 'Your Visit is Accected. Kindly check the details below.' : 'We are very sorry that your visit had been rejected.',
+                    table: table
+                },
+            }
+            
+            let to = visitor.visitor_email;
+            let sub = "Visit Approval";
+            mailer(response, to, sub);
             return res.json({
                 message: message,
                 status: 200
