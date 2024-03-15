@@ -1,3 +1,4 @@
+import { mailer } from "../helpers/mailer.js";
 import { VisitorModel } from "../models/VisitorModel.js";
 
 var createVisitorController = async (req, res) => {
@@ -42,8 +43,8 @@ var createVisitorController = async (req, res) => {
 };
 
 var visitorListController = async (req, res) => {
+    
     const { visit_status } = req.query;
-    // console.log("Query", visit_status);
     try {
         var visitors = null;
         switch (visit_status) {
@@ -77,13 +78,6 @@ var visitorListController = async (req, res) => {
 }
 
 var visitorApprovalController = async (req, res) => {
-    // const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
-    // function parseJwt (token) {
-    //     return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
-    // }
-    // var parseToken = parseJwt(token);
-    // console.log("parse: ", parseToken);
-
     const { visitor_mobile, approval } = req.query;
     try {
         const visitor = await VisitorModel.findOne({ visitor_mobile })
@@ -91,6 +85,7 @@ var visitorApprovalController = async (req, res) => {
             visitor.visit_status = approval;
             await visitor.save();
             let message = approval == 'accepted' ? 'Visit Accected' : 'Visit Rejected';
+            mailer()
             return res.json({
                 message: message,
                 status: 200

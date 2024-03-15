@@ -19,7 +19,7 @@ const app = express();
 
 // CORS Properties
 const corsOpts = {
-    origin: process.env.ORIGIN,
+    origin: process.env.MAIN_URL,
     credentials: true,
     methods: ['GET', 'POST', 'HEAD', 'PUT', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type'],
