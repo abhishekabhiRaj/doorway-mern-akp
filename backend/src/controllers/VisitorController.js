@@ -77,6 +77,13 @@ var visitorListController = async (req, res) => {
 }
 
 var visitorApprovalController = async (req, res) => {
+    // const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
+    // function parseJwt (token) {
+    //     return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+    // }
+    // var parseToken = parseJwt(token);
+    // console.log("parse: ", parseToken);
+
     const { visitor_mobile, approval } = req.query;
     try {
         const visitor = await VisitorModel.findOne({ visitor_mobile })
@@ -99,7 +106,6 @@ var visitorApprovalController = async (req, res) => {
     catch (err) {
         return res.json({ message: err.message, status: err.status });
     }
-
 }
 
 export { createVisitorController, visitorListController, visitorApprovalController };

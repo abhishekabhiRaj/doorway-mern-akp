@@ -3,23 +3,38 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import { authRouter } from './routes/auth.js';
 import { visitorRouter } from './routes/visitor.js';
+import dotenv from 'dotenv';
 
-mongoose.connect('mongodb://localhost:27017/doorway');
+// .evn configuration
+dotenv.config();
 
+// Using Port from .env
+const PORT = process.env.PORT;
+
+// MongoDB Database connection
+mongoose.connect(`${process.env.DATABASE_URL + process.env.DATABASE}`);
+
+// Initiallizing Express
 const app = express();
+
+// CORS Properties
 const corsOpts = {
-    origin: 'https://localhost:8081',
+    origin: process.env.ORIGIN,
     credentials: true,
-    methods: ['GET','POST','HEAD','PUT','PATCH','DELETE'],
+    methods: ['GET', 'POST', 'HEAD', 'PUT', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type'],
     exposedHeaders: ['Content-Type']
 };
+
+// Using Cross Origin and Express Json Response 
 app.use(cors(corsOpts));
 app.use(express.json());
 
+// Routes Defined
 app.use('/', authRouter);
 app.use('/', visitorRouter);
 
-app.listen(8080, ()=>{
-    console.log('Server is running on port 8080');
+// Start Node App On Port
+app.listen(PORT, () => {
+    console.log(`Server's Up On Port ${PORT}`);
 });
