@@ -1,6 +1,8 @@
 import { VisitorModel } from "../models/VisitorModel.js";
 import { mailer } from "../helpers/mailer.js";
 import { generate_qr_code } from "../helpers/generate_qr_code.js";
+import path from 'path';
+import fs from 'fs'
 
 var createVisitorController = async (req, res) => {
     try {
@@ -87,11 +89,20 @@ var visitorApprovalController = async (req, res) => {
             visitor.visit_status = approval;
             await visitor.save();
             // QR Code
-            let qrcode;
-            qrcode = generate_qr_code(visitor.visitor_email);
-            console.log(qrcode);
+            let qrcodePromise = null;
+            let qrcode = null;
+            qrcodePromise =  generate_qr_code(visitor.visitor_email, qrcode).then(url=>url);
+            if(qrcodePromise){
+                qrcodePromise.then(url=>console.log("mmm",url))
+            }else{
+                console.log("No Promise");
+            }
+           
+            // console.log(qrcodePromise.then(url=>url))
+            
             // QR Code
             let message = approval == 'accepted' ? 'Visit Accected' : 'Visit Rejected';
+            
             let table = approval == 'accepted' ?
             {
                 data: [
@@ -120,9 +131,15 @@ var visitorApprovalController = async (req, res) => {
             }:false;
             var response = {
                 body: {
-                    name: `Abhishek Raj <br/> ${qrcode}`,
-                    intro: approval == 'accepted' ? 'Your Visit is Accected. Kindly check the details below.' : 'We are very sorry that your visit had been rejected.',
+                    name: visitor.visitor_name,
+                    intro: approval == 'accepted' ? `Your Visit is Accected. Kindly check the details below.<br/> ${qrcodePromise?`<p>${qrcodePromise.then(url=>url.length)}</p>`:"No Data"}` : 'We are very sorry that your visit had been rejected.',
                     table: table,
+                    attachments: [
+                        {   // data uri as an attachment
+                            filename: 'qr.png',
+                            content: fs.createReadStream(path.resolve()+'/src/assets/qrcode/qr.png')
+                        },
+                    ]
                 },
             }
             
