@@ -1,5 +1,6 @@
-import { mailer } from "../helpers/mailer.js";
 import { VisitorModel } from "../models/VisitorModel.js";
+import { mailer } from "../helpers/mailer.js";
+import { generate_qr_code } from "../helpers/generate_qr_code.js";
 
 var createVisitorController = async (req, res) => {
     try {
@@ -79,11 +80,17 @@ var visitorListController = async (req, res) => {
 
 var visitorApprovalController = async (req, res) => {
     const { visitor_mobile, approval } = req.query;
+    
     try {
         const visitor = await VisitorModel.findOne({ visitor_mobile })
         if (visitor) {
             visitor.visit_status = approval;
             await visitor.save();
+            // QR Code
+            let qrcode;
+            qrcode = generate_qr_code(visitor.visitor_email);
+            console.log(qrcode);
+            // QR Code
             let message = approval == 'accepted' ? 'Visit Accected' : 'Visit Rejected';
             let table = approval == 'accepted' ?
             {
@@ -113,9 +120,9 @@ var visitorApprovalController = async (req, res) => {
             }:false;
             var response = {
                 body: {
-                    name: "Abhishek Raj",
+                    name: `Abhishek Raj <br/> ${qrcode}`,
                     intro: approval == 'accepted' ? 'Your Visit is Accected. Kindly check the details below.' : 'We are very sorry that your visit had been rejected.',
-                    table: table
+                    table: table,
                 },
             }
             

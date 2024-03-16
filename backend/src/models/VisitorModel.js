@@ -5,7 +5,7 @@ const VisitorSchema = new mongoose.Schema({
     visitor_name:{type:String, required: true},
     visitor_purpose:{type:String, required:true},
     visitor_mobile:{type:Number, required:true},
-    visitor_email:{type:String, required:true},
+    visitor_email:{type:String, required:true, unique:true},
     visitor_address:{type:String, required:true},
     visit_date:{type:Date},
     // Person To Meet Fields
