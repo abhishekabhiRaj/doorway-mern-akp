@@ -1,8 +1,9 @@
 import config from '../config/index.js';
 import nodemailer from 'nodemailer';
 import Mailgen from 'mailgen';
+import path, {dirname} from 'path';
 
-const mailer = (res, to, sub) => {
+const mailer = (res, to, sub, url) => {
     // Getting EMAIL And PASSWORD From Which Mail Will Be Sent
     const { EMAIL, PASSWORD, MAIN_URL } = config;
 
@@ -37,13 +38,17 @@ const mailer = (res, to, sub) => {
         to: to,
         subject: sub,
         html: mail,
+        attachments: [{
+            filename: 'image.png',
+            path: url,
+        }]
     };
 
     // Finally Sending The Mail
     transporter
         .sendMail(message)
         .then((res) => {
-            console.log("REs", res);
+            console.log("Mail Sent");
         })
         .catch((error) => console.log(error));
 }

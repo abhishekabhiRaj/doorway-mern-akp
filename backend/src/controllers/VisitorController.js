@@ -1,9 +1,16 @@
 import { VisitorModel } from "../models/VisitorModel.js";
 import { mailer } from "../helpers/mailer.js";
-import { generate_qr_code } from "../helpers/generate_qr_code.js";
-import path from 'path';
+// import { generate_qr_code } from "../helpers/generate_qr_code.js";
+import path, {dirname} from 'path';
 import fs from 'fs'
+import QRCode from "qrcode";
+import { fileURLToPath } from 'url';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const image = fs.ReadStream(`${path.resolve()}/src/assets/qrcode/qr.png`)
+console.log('image',image);
 var createVisitorController = async (req, res) => {
     try {
         const {
@@ -84,25 +91,12 @@ var visitorApprovalController = async (req, res) => {
     const { visitor_mobile, approval } = req.query;
     
     try {
-        const visitor = await VisitorModel.findOne({ visitor_mobile })
+        const visitor = await VisitorModel.findOne({ visitor_mobile });
         if (visitor) {
             visitor.visit_status = approval;
             await visitor.save();
             // QR Code
-            let qrcodePromise = null;
-            let qrcode = null;
-            qrcodePromise =  generate_qr_code(visitor.visitor_email, qrcode).then(url=>url);
-            if(qrcodePromise){
-                qrcodePromise.then(url=>console.log("mmm",url))
-            }else{
-                console.log("No Promise");
-            }
-           
-            // console.log(qrcodePromise.then(url=>url))
-            
-            // QR Code
             let message = approval == 'accepted' ? 'Visit Accected' : 'Visit Rejected';
-            
             let table = approval == 'accepted' ?
             {
                 data: [
@@ -129,23 +123,27 @@ var visitorApprovalController = async (req, res) => {
                     }
                 }
             }:false;
-            var response = {
-                body: {
-                    name: visitor.visitor_name,
-                    intro: approval == 'accepted' ? `Your Visit is Accected. Kindly check the details below.<br/> ${qrcodePromise?`<p>${qrcodePromise.then(url=>url.length)}</p>`:"No Data"}` : 'We are very sorry that your visit had been rejected.',
-                    table: table,
-                    attachments: [
-                        {   // data uri as an attachment
-                            filename: 'qr.png',
-                            content: fs.createReadStream(path.resolve()+'/src/assets/qrcode/qr.png')
-                        },
-                    ]
-                },
-            }
             
             let to = visitor.visitor_email;
             let sub = "Visit Approval";
-            mailer(response, to, sub);
+            QRCode.toDataURL('I am a pony!',{width:100, height:100, type: 'image/png'})
+                .then(url => {
+                    var response = {
+                        body: {
+                            name: visitor.visitor_name,
+                            intro: approval == 'accepted' ? `Your Visit is Accected. Kindly check the details below.` : 'We are very sorry that your visit had been rejected.',
+                            table: table,
+                            
+                        },
+                    }
+                    console.log("res", response.body.attachments)
+                    mailer(response, to, sub, url);
+                })
+                .catch(err => {
+                    console.error(err)
+            });
+            
+            
             return res.json({
                 message: message,
                 status: 200
