@@ -2,9 +2,9 @@ import { VisitorModel } from "../models/VisitorModel.js";
 import { mailer } from "../helpers/mailer.js";
 // import { generate_qr_code } from "../helpers/generate_qr_code.js";
 import QRCode from "qrcode";
+import moment from 'moment';
 
-
-
+// Controller For Creating Visit
 var createVisitorController = async (req, res) => {
     try {
         const {
@@ -46,6 +46,7 @@ var createVisitorController = async (req, res) => {
     }
 };
 
+// Controller For Getting Visit List
 var visitorListController = async (req, res) => {
     
     const { visit_status } = req.query;
@@ -81,6 +82,7 @@ var visitorListController = async (req, res) => {
     }
 }
 
+// Controller For Approving Visit 
 var visitorApprovalController = async (req, res) => {
     const { visitor_mobile, approval } = req.query;
     
@@ -155,6 +157,7 @@ var visitorApprovalController = async (req, res) => {
     }
 }
 
+// Controller For Check In Visitor
 var visitorCheckinController = async (req, res) => {
     const {email, check_in_time} = req.query;
     const token = req.headers?.authorization?.split(' ')[1];
@@ -168,7 +171,7 @@ var visitorCheckinController = async (req, res) => {
     try{
         let visitor = await VisitorModel.findOne({ visitor_email : email });
         if(visitor){
-            visitor.visitor_login = check_in_time?check_in_time:moment();
+            visitor.visitor_login = moment().format('DD-MM-YYYY HH:mm A');
             await visitor.save();
             return res.json({
                 message : "Visitor Checked In Successfully!"
