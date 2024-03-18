@@ -1,16 +1,10 @@
 import { VisitorModel } from "../models/VisitorModel.js";
 import { mailer } from "../helpers/mailer.js";
 // import { generate_qr_code } from "../helpers/generate_qr_code.js";
-import path, {dirname} from 'path';
-import fs from 'fs'
 import QRCode from "qrcode";
-import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
-const image = fs.ReadStream(`${path.resolve()}/src/assets/qrcode/qr.png`)
-console.log('image',image);
+
 var createVisitorController = async (req, res) => {
     try {
         const {
@@ -161,4 +155,39 @@ var visitorApprovalController = async (req, res) => {
     }
 }
 
-export { createVisitorController, visitorListController, visitorApprovalController };
+var visitorCheckinController = async (req, res) => {
+    const {email, check_in_time} = req.query;
+    const token = req.headers?.authorization?.split(' ')[1];
+    console.log(token);
+    if(!email){
+        return res.json({
+            message : "Email Not Provided!",
+            status:401
+        })
+    }
+    try{
+        let visitor = await VisitorModel.findOne({ visitor_email : email });
+        if(visitor){
+            visitor.visitor_login = check_in_time?check_in_time:moment();
+            await visitor.save();
+            return res.json({
+                message : "Visitor Checked In Successfully!"
+            })
+        }else{
+            return res.json({
+                message : "Not Visitor Found By This Email!",
+                status: 401
+            })
+        }
+    }
+    catch (err) {
+        return res.json({ message: err.message, status: err.status });
+    }
+}
+
+export {
+    createVisitorController,
+    visitorListController,
+    visitorApprovalController,
+    visitorCheckinController
+ };
