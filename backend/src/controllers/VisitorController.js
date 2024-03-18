@@ -126,18 +126,18 @@ var visitorApprovalController = async (req, res) => {
             
             let to = visitor.visitor_email;
             let sub = "Visit Approval";
-            QRCode.toDataURL('I am a pony!',{width:100, height:100, type: 'image/png'})
+            QRCode.toDataURL(to,{width:400, height:400, type: 'image/png'})
                 .then(url => {
                     var response = {
                         body: {
                             name: visitor.visitor_name,
                             intro: approval == 'accepted' ? `Your Visit is Accected. Kindly check the details below.` : 'We are very sorry that your visit had been rejected.',
                             table: table,
-                            
                         },
                     }
-                    console.log("res", response.body.attachments)
-                    mailer(response, to, sub, url);
+                    approval == 'accepted' ?
+                    mailer(response, to, sub, url, 'image.png'):
+                    mailer(response, to, sub)
                 })
                 .catch(err => {
                     console.error(err)

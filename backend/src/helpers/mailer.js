@@ -3,7 +3,7 @@ import nodemailer from 'nodemailer';
 import Mailgen from 'mailgen';
 import path, {dirname} from 'path';
 
-const mailer = (res, to, sub, url) => {
+const mailer = (res, to, sub, url, filename) => {
     // Getting EMAIL And PASSWORD From Which Mail Will Be Sent
     const { EMAIL, PASSWORD, MAIN_URL } = config;
 
@@ -38,11 +38,14 @@ const mailer = (res, to, sub, url) => {
         to: to,
         subject: sub,
         html: mail,
-        attachments: [{
-            filename: 'image.png',
+    };
+
+    if(url){
+        message['attachments'] = [{
+            filename: filename,
             path: url,
         }]
-    };
+    }
 
     // Finally Sending The Mail
     transporter
