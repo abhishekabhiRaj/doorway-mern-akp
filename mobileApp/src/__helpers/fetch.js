@@ -1,9 +1,9 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { baseUrl } from '../_api/api';
-import { useStorage } from './useStorage';
+import { useStorage } from '../_hook/useStorage';
 
-export const useFetch = (route) => {
+export const fetch = (route) => {
 	const [token, setToken] = useStorage('token', '');
 	const [data, setData] = useState([]);
 	const [pending, setPending] = useState(false);

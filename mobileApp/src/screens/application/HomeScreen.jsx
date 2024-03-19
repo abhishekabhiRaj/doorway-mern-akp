@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   StyleSheet,
+  ActivityIndicator,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Feather from 'react-native-vector-icons/Feather';
@@ -17,7 +18,7 @@ import {baseUrl} from '../../_api/api';
 import {useStorage} from '../../_hook/useStorage';
 import {jwt_decode} from 'jwt-decode-es';
 import moment from 'moment';
-import { useFetch } from '../../_hook/useFetch';
+import { useFetch } from '../../__helpers/fetch';
 
 const gray = '#ccd3db';
 
@@ -127,10 +128,42 @@ const HomeScreen = () => {
   
   // ###############################################
   const [activeTab, setActiveTab] = useState(0);
-  // const [vistData, setVisitData] = useState([]);
-  const theme = useSelector(state => state.theme.value);
+  const [vistData, setVisitData] = useState([]);
+	const [token, setToken] = useStorage('token', '');
 
-  var [vistData, loading] = useFetch('visit-list');
+  const theme = useSelector(state => state.theme.value);
+	const [pending, setPending] = useState(false);
+  const [visitStatus, setVisitStatus] = useState('')
+
+
+  const handleFetchData = () => {
+		setVisitData([]);
+		setPending(true);
+		axios
+			.get(baseUrl + 'visit-list',
+        {
+          params: {
+            visit_status: visitStatus?visitStatus:'',
+          },
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': `Bearer ${token}`,
+				},
+			})
+			.then(res => {
+				setPending(false);
+				if (res.data.status == 200) {
+					setVisitData(res.data.data);
+				} else {
+					setVisitData([]);
+				}
+			})
+			.catch(err => console.warn(err));
+	};
+
+  useEffect(()=>{
+    handleFetchData();
+  },[visitStatus])
    
   return (
     <SafeAreaView>
@@ -162,7 +195,7 @@ const HomeScreen = () => {
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View className="flex-row mb-2 mt-2 p-4 pt-1 pb-0">
-            <TouchableOpacity className="mr-3" onPress={() => setActiveTab(0)}>
+            <TouchableOpacity className="mr-3" onPress={() => {setActiveTab(0);setVisitStatus('')}}>
               <Text
                 className="text-black m-0"
                 style={
@@ -180,7 +213,7 @@ const HomeScreen = () => {
                     : {backgroundColor: 'transparent'}
                 }></Text>
             </TouchableOpacity>
-            <TouchableOpacity className="mr-3" onPress={() => setActiveTab(1)}>
+            <TouchableOpacity className="mr-3" onPress={() => {setActiveTab(1);setVisitStatus('pending')}}>
               <Text
                 className="text-black m-0"
                 style={
@@ -198,7 +231,7 @@ const HomeScreen = () => {
                     : {backgroundColor: 'transparent'}
                 }></Text>
             </TouchableOpacity>
-            <TouchableOpacity className="mr-3" onPress={() => setActiveTab(2)}>
+            <TouchableOpacity className="mr-3" onPress={() => {setActiveTab(2);setVisitStatus('accepted')}}>
               <Text
                 className="text-black m-0"
                 style={
@@ -216,7 +249,7 @@ const HomeScreen = () => {
                     : {backgroundColor: 'transparent'}
                 }></Text>
             </TouchableOpacity>
-            <TouchableOpacity className="mr-3" onPress={() => setActiveTab(3)}>
+            <TouchableOpacity className="mr-3" onPress={() => {setActiveTab(3);setVisitStatus('rejected')}}>
               <Text
                 className="text-black m-0"
                 style={
@@ -241,9 +274,9 @@ const HomeScreen = () => {
         <ScrollView showsVerticalScrollIndicator={false}>
           {/* Tabs  */}
           <View className="mb-48 p-4 pt-2">
-            <ListTab activeTab={0} vistData={vistData} />
-            <ListTab activeTab={1} vistData={vistData} />
-            <ListTab activeTab={2} vistData={vistData} />
+            <ListTab activeTab={0} vistData={vistData} pending={pending} />
+            <ListTab activeTab={1} vistData={vistData} pending={pending} />
+            <ListTab activeTab={2} vistData={vistData} pending={pending} />
           </View>
           {/* Tabs  */}
         </ScrollView>
@@ -256,19 +289,25 @@ const HomeScreen = () => {
 export default HomeScreen;
 
 
-const ListTab = ({activeTab, vistData}) => {
+const ListTab = ({activeTab, vistData, pending}) => {
   return(
     <>
     {activeTab === 0 && (
       <View>
         {
-          vistData.length > 0 ? 
+          !pending?
+          vistData&&vistData.length > 0 ? 
           vistData.map((item, index) => {
             return(
               <VisitCard item={item} key={index} />
             )
           })
-          : <Text>No Visit</Text>
+          : <View className="bg-white flex-1  p-4 rounded-lg">
+            <Text className="text-center">No Record Found</Text>
+        </View>
+          :<View className="bg-white flex-1  p-4 rounded-lg">
+            <ActivityIndicator size="large" color="#337ab7" />
+          </View>
         }
       </View>
     )}
