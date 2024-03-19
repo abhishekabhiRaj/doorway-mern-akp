@@ -1,6 +1,5 @@
 import { VisitorModel } from "../models/VisitorModel.js";
 import { mailer } from "../helpers/mailer.js";
-// import { generate_qr_code } from "../helpers/generate_qr_code.js";
 import QRCode from "qrcode";
 import moment from 'moment';
 
@@ -158,8 +157,8 @@ var visitorApprovalController = async (req, res) => {
 }
 
 // Controller For Check In Visitor
-var visitorCheckinController = async (req, res) => {
-    const {email, check_in_time} = req.query;
+var visitorCheckinoutController = async (req, res) => {
+    const {email, check_in_out} = req.query;
     const token = req.headers?.authorization?.split(' ')[1];
     console.log(token);
     if(!email){
@@ -171,11 +170,72 @@ var visitorCheckinController = async (req, res) => {
     try{
         let visitor = await VisitorModel.findOne({ visitor_email : email });
         if(visitor){
-            visitor.visitor_login = moment().format('DD-MM-YYYY HH:mm A');
-            await visitor.save();
+            if(check_in_out == 'i'){
+                visitor.visitor_login = moment().format('DD-MM-YYYY HH:mm A');
+                await visitor.save();
+                return res.json({
+                    message : "Visitor Checked In Successfully!",
+                    status: 200
+                })
+            }else{
+                if(visitor.visit_completed == "no"){
+                    return res.json({
+                        message : "Visit is not completed!",
+                        status: 200
+                    })
+                }
+                if(visitor.visitor_login != ""){
+                    visitor.visitor_logout = moment().format('DD-MM-YYYY HH:mm A');
+                    await visitor.save();
+                    return res.json({
+                        message : "Visitor Checked Out Successfully!",
+                        status: 200
+                    })
+                }else{
+                    return res.json({
+                        message : "Visitor Is Not Checked In!",
+                        status: 400
+                    })
+                }
+            }
+            
+        }else{
             return res.json({
-                message : "Visitor Checked In Successfully!"
+                message : "Not Visitor Found By This Email!",
+                status: 401
             })
+        }
+    }
+    catch (err) {
+        return res.json({ message: err.message, status: err.status });
+    }
+}
+
+// Controller For Check In Visitor
+var visitorMarkCompleteController = async (req, res) => {
+    const {email} = req.query;
+    if(!email){
+        return res.json({
+            message : "Email Not Provided!",
+            status:401
+        })
+    }
+    try{
+        let visitor = await VisitorModel.findOne({ visitor_email : email });
+        if(visitor){
+            if(visitor.visitor_login != ''){
+                visitor.visit_completed = "yes";
+                await visitor.save(); 
+                return res.json({
+                    message : "Visit Marked As Completed!",
+                    status: 200
+                });
+            }else{
+                return res.json({
+                    message : "Visitor Had Not Logged In Yet!",
+                    status: 401
+                })
+            }
         }else{
             return res.json({
                 message : "Not Visitor Found By This Email!",
@@ -192,5 +252,6 @@ export {
     createVisitorController,
     visitorListController,
     visitorApprovalController,
-    visitorCheckinController
+    visitorCheckinoutController,
+    visitorMarkCompleteController
  };
