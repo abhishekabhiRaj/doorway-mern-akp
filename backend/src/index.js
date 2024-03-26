@@ -14,7 +14,10 @@ const PORT = process.env.PORT;
 // MongoDB Database connection
 // mongoose.connect(`${process.env.DATABASE_URL + process.env.DATABASE}`);
 
-mongoose.connect(`${process.env.DATABASE_URL}`);
+mongoose.connect(`${process.env.DATABASE_URL}`, (err) => {
+    if(err) console.log("This is err",err) 
+    else console.log("mongdb is connected");
+   });
 
 // Initiallizing Express
 const app = express();
