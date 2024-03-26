@@ -13,7 +13,11 @@ const PORT = process.env.PORT;
 
 // MongoDB Database connection
 // mongoose.connect(`${process.env.DATABASE_URL + process.env.DATABASE}`);
-mongoose.connect(`${process.env.DATABASE_URL}`);
+
+const connect = async () => {
+    await mongoose.connect(`${process.env.DATABASE_URL}`);
+}
+connect();
 
 // Initiallizing Express
 const app = express();
