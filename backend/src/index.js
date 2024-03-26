@@ -12,7 +12,8 @@ dotenv.config();
 const PORT = process.env.PORT;
 
 // MongoDB Database connection
-mongoose.connect(`${process.env.DATABASE_URL + process.env.DATABASE}`);
+// mongoose.connect(`${process.env.DATABASE_URL + process.env.DATABASE}`);
+mongoose.connect(`${process.env.DATABASE_URL}`);
 
 // Initiallizing Express
 const app = express();
