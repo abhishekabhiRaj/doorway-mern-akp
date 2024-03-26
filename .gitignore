@@ -5,3 +5,5 @@
 /mobileApp/android/.gradle/
 .DS_Store
 /node_modules/
+./backend/.env
+.env
