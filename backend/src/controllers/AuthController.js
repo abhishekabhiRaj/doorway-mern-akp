@@ -1,5 +1,6 @@
 import { UserModel } from '../models/UserModel.js';
 import jsonwebtoken from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 
 // controller for login function calling in auth.js
 var registerController = async (req, res) => {

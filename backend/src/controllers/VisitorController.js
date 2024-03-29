@@ -47,7 +47,6 @@ var createVisitorController = async (req, res) => {
 
 // Controller For Getting Visit List
 var visitorListController = async (req, res) => {
-    
     const { visit_status } = req.query;
     try {
         var visitors = null;

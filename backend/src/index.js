@@ -13,16 +13,21 @@ const PORT = process.env.PORT;
 
 // MongoDB Database connection
 // mongoose.connect(`${process.env.DATABASE_URL + process.env.DATABASE}`);
-
+var connect; 
 try {
-    await mongoose.connect(`${process.env.DATABASE_URL}`);
+    connect = await mongoose.connect(`${process.env.DATABASE_URL}`);
+    if(connect){
+      console.log("connected")
+    }else{
+      console.log("not connected")
+    }
   } catch (error) {
     console.log("ABHI",error);
   }
 
-
-// Initiallizing Express
-const app = express();
+  
+  // Initiallizing Express
+  const app = express();
 
 // CORS Properties
 const corsOpts = {
