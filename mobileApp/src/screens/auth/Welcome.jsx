@@ -99,7 +99,7 @@ const Welcome = () => {
         />
         <View style={{ height:10 }}></View>
         <Button
-          onPress={handleSubmit(handleSignIn)}
+        //   onPress={handleSubmit(handleSignIn)}
           color={color.secondaryColor}
           title="Register"
         />

@@ -16,12 +16,9 @@ import {commonDarkStyle, commonStyle} from '../../style/style';
 import axios from 'axios';
 import {baseUrl} from '../../_api/api';
 import {useStorage} from '../../_hook/useStorage';
-import {jwt_decode} from 'jwt-decode-es';
-import moment from 'moment';
-import { useFetch } from '../../__helpers/fetch';
+
 
 const gray = '#ccd3db';
-
 
 const VisitCard = ({item}) => {
   const navigation = useNavigation();
@@ -125,66 +122,66 @@ const HomeScreen = () => {
       headerShown: false,
     });
   });
-  
+
   // ###############################################
   const [activeTab, setActiveTab] = useState(0);
   const [vistData, setVisitData] = useState([]);
-	const [token, setToken] = useStorage('token', '');
+  const [token, setToken] = useStorage('token', '');
 
   const theme = useSelector(state => state.theme.value);
-	const [pending, setPending] = useState(false);
-  const [visitStatus, setVisitStatus] = useState('')
-
+  const [pending, setPending] = useState(false);
+  const [visitStatus, setVisitStatus] = useState('');
 
   const handleFetchData = () => {
-		setVisitData([]);
-		setPending(true);
-		axios
-			.get(baseUrl + 'visit-list',
-        {
-          params: {
-            visit_status: visitStatus?visitStatus:'',
-          },
-				headers: {
-					'Content-Type': 'application/json',
-					'Authorization': `Bearer ${token}`,
-				},
-			})
-			.then(res => {
-				setPending(false);
-				if (res.data.status == 200) {
-					setVisitData(res.data.data);
-				} else {
-					setVisitData([]);
-				}
-			})
-			.catch(err => console.warn(err));
-	};
+    setVisitData([]);
+    setPending(true);
+    axios
+      .get(baseUrl + 'visit-list', {
+        params: {
+          visit_status: visitStatus ? visitStatus : '',
+        },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(res => {
+        setPending(false);
+        if (res.data.status == 200) {
+          setVisitData(res.data.data);
+        } else {
+          setVisitData([]);
+        }
+      })
+      .catch(err => console.warn(err));
+  };
 
-  const handleApproveVisit = (data) => {
-    axios.post( baseUrl + 'login', data, {
-      headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      }}) 
-    .then(res=>{
-      if(res.data.status == 200){
-        navigation.navigate('Application');
-        setToken(res.data.token);
-        // dispatch(setUser(res.data.user))
-      }else{
-        console.warn("Error")
-      }
-    })
-    .catch(err=> console.warn(err));
-  }
+  const handleApproveVisit = data => {
+    axios
+      .post(baseUrl + 'login', data, {
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      })
+      .then(res => {
+        if (res.data.status == 200) {
+          navigation.navigate('Application');
+          setToken(res.data.token);
+          // dispatch(setUser(res.data.user))
+        } else {
+          console.warn('Error');
+        }
+      })
+      .catch(err => console.warn(err));
+  };
 
-  useEffect(()=>{
-    if(token){
+  useEffect(() => {
+    if (token) {
       handleFetchData();
     }
-  },[visitStatus, token])
-   
+  }, [visitStatus, token]);
+
   return (
     <SafeAreaView>
       <View className={`app-1 ${theme === 'dark' && 'bg-black/[0.9]'}`}>
@@ -215,7 +212,12 @@ const HomeScreen = () => {
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View className="flex-row mb-2 mt-2 p-4 pt-1 pb-0">
-            <TouchableOpacity className="mr-3" onPress={() => {setActiveTab(0);setVisitStatus('')}}>
+            <TouchableOpacity
+              className="mr-3"
+              onPress={() => {
+                setActiveTab(0);
+                setVisitStatus('');
+              }}>
               <Text
                 className="text-black m-0"
                 style={
@@ -233,7 +235,12 @@ const HomeScreen = () => {
                     : {backgroundColor: 'transparent'}
                 }></Text>
             </TouchableOpacity>
-            <TouchableOpacity className="mr-3" onPress={() => {setActiveTab(1);setVisitStatus('pending')}}>
+            <TouchableOpacity
+              className="mr-3"
+              onPress={() => {
+                setActiveTab(1);
+                setVisitStatus('pending');
+              }}>
               <Text
                 className="text-black m-0"
                 style={
@@ -251,7 +258,12 @@ const HomeScreen = () => {
                     : {backgroundColor: 'transparent'}
                 }></Text>
             </TouchableOpacity>
-            <TouchableOpacity className="mr-3" onPress={() => {setActiveTab(2);setVisitStatus('accepted')}}>
+            <TouchableOpacity
+              className="mr-3"
+              onPress={() => {
+                setActiveTab(2);
+                setVisitStatus('accepted');
+              }}>
               <Text
                 className="text-black m-0"
                 style={
@@ -269,7 +281,12 @@ const HomeScreen = () => {
                     : {backgroundColor: 'transparent'}
                 }></Text>
             </TouchableOpacity>
-            <TouchableOpacity className="mr-3" onPress={() => {setActiveTab(3);setVisitStatus('rejected')}}>
+            <TouchableOpacity
+              className="mr-3"
+              onPress={() => {
+                setActiveTab(3);
+                setVisitStatus('rejected');
+              }}>
               <Text
                 className="text-black m-0"
                 style={
@@ -308,29 +325,28 @@ const HomeScreen = () => {
 
 export default HomeScreen;
 
-
 const ListTab = ({activeTab, vistData, pending}) => {
-  return(
+  return (
     <>
-    {activeTab === 0 && (
-      <View>
-        {
-          !pending?
-          vistData&&vistData.length > 0 ? 
-          vistData.map((item, index) => {
-            return(
-              <VisitCard item={item} key={index} />
+      {activeTab === 0 && (
+        <View>
+          {!pending ? (
+            vistData && vistData.length > 0 ? (
+              vistData.map((item, index) => {
+                return <VisitCard item={item} key={index} />;
+              })
+            ) : (
+              <View className="bg-white flex-1  p-4 rounded-lg">
+                <Text className="text-center">No Record Found</Text>
+              </View>
             )
-          })
-          : <View className="bg-white flex-1  p-4 rounded-lg">
-            <Text className="text-center">No Record Found</Text>
+          ) : (
+            <View className="bg-white flex-1  p-4 rounded-lg">
+              <ActivityIndicator size="large" color="#337ab7" />
+            </View>
+          )}
         </View>
-          :<View className="bg-white flex-1  p-4 rounded-lg">
-            <ActivityIndicator size="large" color="#337ab7" />
-          </View>
-        }
-      </View>
-    )}
+      )}
     </>
-  )
-}
+  );
+};
