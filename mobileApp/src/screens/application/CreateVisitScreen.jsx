@@ -165,8 +165,8 @@ const CreateVisitScreen = () => {
                 <View className="p-4 bg-white rounded-lg mt-4" style={{ elevation: 2 }}>
                     {formSteps == 0 && (
                         <View>
-                            <View className="mb-1">
-                                <Text className="text-black mb-1">Visitor Name <Text className="text-red-500">*</Text> </Text>
+                            <View className="mb-2">
+                                <Text className="text-black mb-1">Visitor's Name <Text className="text-red-500">*</Text> </Text>
                                 <Controller
                                     control={control}
                                     rules={{
@@ -193,8 +193,8 @@ const CreateVisitScreen = () => {
                                     </Text>
                                 )}
                             </View>
-                            <View>
-                                <Text className="text-black mb-1">Email <Text className="text-red-500">*</Text> </Text>
+                            <View className="mb-2">
+                                <Text className="text-black mb-1">Visitor's Email <Text className="text-red-500">*</Text> </Text>
                                 <Controller
                                     control={control}
                                     rules={{
@@ -207,7 +207,6 @@ const CreateVisitScreen = () => {
                                                 ...defaultTheme.defaultMarginBottom,
                                                 ...defaultTheme.defaultColor,
                                             }}
-                                            value={'ryabhishek@yahoo.com'}
                                             onChangeText={onChange}
                                             placeholder="Email"
                                             placeholderTextColor="gray"
@@ -218,6 +217,87 @@ const CreateVisitScreen = () => {
                                 {errors.email && (
                                     <Text style={{ color: 'red', marginBottom: 8 }}>
                                         {errors.email.message}
+                                    </Text>
+                                )}
+                            </View>
+                            <View className="mb-2">
+                                <Text className="text-black mb-1">Visitor's Purpose <Text className="text-red-500">*</Text> </Text>
+                                <Controller
+                                    control={control}
+                                    rules={{
+                                        required: true,
+                                    }}
+                                    render={({ field: { onChange, value } }) => (
+                                        <TextInput
+                                            style={{
+                                                ...defaultTheme.defaultTextInput,
+                                                ...defaultTheme.defaultMarginBottom,
+                                                ...defaultTheme.defaultColor,
+                                            }}
+                                            onChangeText={onChange}
+                                            placeholder="Enter Visit Purpose..."
+                                            placeholderTextColor="gray"
+                                        />
+                                    )}
+                                    name="visitor_purpose"
+                                />
+                                {errors.visitor_purpose && (
+                                    <Text style={{ color: 'red', marginBottom: 8 }}>
+                                        {errors.visitor_purpose.message}
+                                    </Text>
+                                )}
+                            </View>
+                            <View className="mb-2">
+                                <Text className="text-black mb-1">Visitor's Mobile <Text className="text-red-500">*</Text> </Text>
+                                <Controller
+                                    control={control}
+                                    rules={{
+                                        required: true,
+                                    }}
+                                    render={({ field: { onChange, value } }) => (
+                                        <TextInput
+                                            style={{
+                                                ...defaultTheme.defaultTextInput,
+                                                ...defaultTheme.defaultMarginBottom,
+                                                ...defaultTheme.defaultColor,
+                                            }}
+                                            onChangeText={onChange}
+                                            placeholder="Enter Visitor's Mobile..."
+                                            placeholderTextColor="gray"
+                                        />
+                                    )}
+                                    name="visitor_mobile"
+                                />
+                                {errors.visitor_mobile && (
+                                    <Text style={{ color: 'red', marginBottom: 8 }}>
+                                        {errors.visitor_mobile.message}
+                                    </Text>
+                                )}
+                            </View>
+                            <View className="mb-2">
+                                <Text className="text-black mb-1">Visitor's Address <Text className="text-red-500">*</Text> </Text>
+                                <Controller
+                                    control={control}
+                                    rules={{
+                                        required: true,
+                                    }}
+                                    render={({ field: { onChange, value } }) => (
+                                        <TextInput
+                                            style={{
+                                                ...defaultTheme.defaultTextInput,
+                                                ...defaultTheme.defaultMarginBottom,
+                                                ...defaultTheme.defaultColor,
+                                            }}
+                                            onChangeText={onChange}
+                                            placeholder="Enter Visitor's Mobile..."
+                                            placeholderTextColor="gray"
+                                        />
+                                    )}
+                                    name="visitor_mobile"
+                                />
+                                {errors.visitor_mobile && (
+                                    <Text style={{ color: 'red', marginBottom: 8 }}>
+                                        {errors.visitor_mobile.message}
                                     </Text>
                                 )}
                             </View>
