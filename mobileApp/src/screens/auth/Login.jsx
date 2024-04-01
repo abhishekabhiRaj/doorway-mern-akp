@@ -16,15 +16,7 @@ const Login = () => {
   const navigation = useNavigation();
   const [defaultTheme, setDefaultTheme] = useState(commonStyle);
   const theme = useSelector(state=>state.theme.value);
-  useEffect(()=>{
-    setDefaultTheme(theme === 'default'? commonStyle : commonDarkStyle );
-  },[theme]);
-  useLayoutEffect(()=>{
-    // setToken();
-    navigation.setOptions({
-        headerShown:false
-    })
-},[])
+  
 
   const schema = yup.object().shape({
     email: yup
@@ -49,7 +41,7 @@ const Login = () => {
       password: '',
     },
   });
-  const signIn = (data) => {
+  const handleSignIn = (data) => {
     axios.post( baseUrl + 'login', data, {
       headers: {
       'Content-Type': 'application/json',
@@ -67,7 +59,15 @@ const Login = () => {
     .catch(err=> console.warn(err));
   }
 
-  useEffect (()=> {console.log(token)}, [token])
+  useEffect(()=>{
+    setDefaultTheme(theme === 'default'? commonStyle : commonDarkStyle );
+  },[theme]);
+  useLayoutEffect(()=>{
+    // setToken();
+    navigation.setOptions({
+        headerShown:false
+    })
+},[])
    
 
   return(
@@ -89,7 +89,7 @@ const Login = () => {
           ...defaultTheme.defaultHeading,
           ...defaultTheme.defaultMarginBottom,
         }}>
-        Sign In
+        Login
       </Text>
       <View>
         <Controller
@@ -139,7 +139,7 @@ const Login = () => {
           <Text style={{color: 'red', marginBottom:16}}>{errors.password.message}</Text>
         )}
         <Button
-          onPress={handleSubmit(signIn)}
+          onPress={handleSubmit(handleSignIn)}
           color={color.primaryColor}
           style={{...defaultTheme.primaryButton}}
           title="Sign In"

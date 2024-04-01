@@ -80,17 +80,17 @@ const VisitCard = ({item}) => {
         <TouchableOpacity className="p-1 px-2">
           <Text
             className={`text-xs ${
-              theme === 'dark' ? 'text-white/[0.7]' : 'text-black'
+              theme === 'dark' ? 'text-white/[0.7]' : 'text-green-400'
             }`}>
-            <Feather name="thumbs-up" size={16} />{' '}
+            <Feather name="check" size={16} />{' '}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity className="p-1 px-2">
           <Text
             className={`text-xs ${
-              theme === 'dark' ? 'text-white/[0.7]' : 'text-black'
+              theme === 'dark' ? 'text-white/[0.7]' : 'text-red-500'
             }`}>
-            <Feather name="thumbs-down" size={16} />{' '}
+            <Feather name="x" size={16} />{' '}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity className="p-1 px-2">
@@ -161,9 +161,29 @@ const HomeScreen = () => {
 			.catch(err => console.warn(err));
 	};
 
+  const handleApproveVisit = (data) => {
+    axios.post( baseUrl + 'login', data, {
+      headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      }}) 
+    .then(res=>{
+      if(res.data.status == 200){
+        navigation.navigate('Application');
+        setToken(res.data.token);
+        // dispatch(setUser(res.data.user))
+      }else{
+        console.warn("Error")
+      }
+    })
+    .catch(err=> console.warn(err));
+  }
+
   useEffect(()=>{
-    handleFetchData();
-  },[visitStatus])
+    if(token){
+      handleFetchData();
+    }
+  },[visitStatus, token])
    
   return (
     <SafeAreaView>

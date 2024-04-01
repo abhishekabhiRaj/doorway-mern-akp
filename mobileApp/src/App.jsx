@@ -30,7 +30,8 @@ const App = () => {
   return (
     <Provider store={store}>
     <NavigationContainer>
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName='Welcome'>
+      <Stack.Screen name="Welcome" component={Welcome} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Application" component={Application} />
     </Stack.Navigator>

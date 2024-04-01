@@ -12,13 +12,13 @@ const commonStyle = StyleSheet.create({
         padding:10
     },
     defaultImage:{
-        width:310,
-        height:180,
+        width:360,
+        height:250,
         marginBottom:20
     },
     loginLogo:{
-        width:200,
-        height:100,
+        width:170,
+        height:80,
         marginBottom:20
     },
     itemCenter:{
