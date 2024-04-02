@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { useEffect, useLayoutEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Button } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Button, ScrollView } from 'react-native';
 import { color } from '../../style/color';
 import { useSelector } from 'react-redux';
 import { commonDarkStyle, commonStyle } from '../../style/style';
@@ -17,6 +17,7 @@ import RNFS from 'react-native-fs';
 import DatePicker from 'react-native-date-picker'
 import Feather from 'react-native-vector-icons/Feather';
 import moment from 'moment';
+import { useStorage } from '../../_hook/useStorage';
 
 
 const CreateVisitScreen = () => {
@@ -33,9 +34,12 @@ const CreateVisitScreen = () => {
             headerShown: false,
         });
     });
+  const [token, setToken] = useStorage('token', null);
+
     const [selectedImage, setSelectedImage] = useState(null);
     const [date, setDate] = useState(new Date())
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(false);
+    const [pending, setPending] = useState(false);
 
     // 
     const handleCameraLaunch = () => {
@@ -110,6 +114,7 @@ const CreateVisitScreen = () => {
     const {
         control,
         getValues,
+        setValue,
         handleSubmit,
         formState: { errors },
     } = useForm({
@@ -120,13 +125,36 @@ const CreateVisitScreen = () => {
             visitor_mobile: '',
             visitor_email: '',
             visitor_address: '',
-            visit_date: '',
+            visit_date: moment().format('DD/MM/YYYY HH:mm A'),
             ptm_name: '',
             ptm_mobile: '',
             ptm_email: '',
             ptm_address: '',
         },
     });
+
+    const handleCreateVisit = data => {
+        console.log('data', data)
+        setPending(true);
+        axios
+          .post(baseUrl + 'create-visit', data, {
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then(res => {
+            setPending(false);
+            if (res.data.status == 200) {
+              navigation.navigate('Home');
+              // dispatch(setUser(res.data.user))
+            } else {
+              console.warn('Error');
+            }
+          })
+          .catch(err => console.warn(err));
+      };
 
     return (
       <>
@@ -171,7 +199,9 @@ const CreateVisitScreen = () => {
           </View>
           <View className="p-4 bg-white rounded-lg mt-4" style={{elevation: 2}}>
             {formSteps == 0 && (
+                 <ScrollView showsVerticalScrollIndicator={false}>
               <View>
+                {/* visitor_name */}
                 <View className="mb-2">
                   <Text className="text-black mb-1">
                     Visitor's Name <Text className="text-red-500">*</Text>{' '}
@@ -202,6 +232,7 @@ const CreateVisitScreen = () => {
                     </Text>
                   )}
                 </View>
+                {/* visitor_email */}
                 <View className="mb-2">
                   <Text className="text-black mb-1">
                     Visitor's Email <Text className="text-red-500">*</Text>{' '}
@@ -223,14 +254,15 @@ const CreateVisitScreen = () => {
                         placeholderTextColor="gray"
                       />
                     )}
-                    name="email"
+                    name="visitor_email"
                   />
-                  {errors.email && (
+                  {errors.visitor_email && (
                     <Text style={{color: 'red', marginBottom: 8}}>
-                      {errors.email.message}
+                      {errors.visitor_email.message}
                     </Text>
                   )}
                 </View>
+                {/* visitor_purpose */}
                 <View className="mb-2">
                   <Text className="text-black mb-1">
                     Visitor's Purpose <Text className="text-red-500">*</Text>{' '}
@@ -260,6 +292,7 @@ const CreateVisitScreen = () => {
                     </Text>
                   )}
                 </View>
+                {/* visitor_mobile */}
                 <View className="mb-2">
                   <Text className="text-black mb-1">
                     Visitor's Mobile <Text className="text-red-500">*</Text>{' '}
@@ -289,6 +322,7 @@ const CreateVisitScreen = () => {
                     </Text>
                   )}
                 </View>
+                {/* visitor_address */}
                 <View className="mb-2">
                   <Text className="text-black mb-1">
                     Visitor's Address <Text className="text-red-500">*</Text>{' '}
@@ -310,15 +344,16 @@ const CreateVisitScreen = () => {
                         placeholderTextColor="gray"
                       />
                     )}
-                    name="visitor_mobile"
+                    name="visitor_address"
                   />
-                  {errors.visitor_mobile && (
+                  {errors.visitor_address && (
                     <Text style={{color: 'red', marginBottom: 8}}>
-                      {errors.visitor_mobile.message}
+                      {errors.visitor_address.message}
                     </Text>
                   )}
                 </View>
-                <View className="mb-2">
+                {/* date */}
+                <View className="mb-8">
                   <Text className="text-black mb-1">
                     Visit Date <Text className="text-red-500">*</Text>
                   </Text>
@@ -347,6 +382,7 @@ const CreateVisitScreen = () => {
                           onConfirm={date => {
                             setOpen(false);
                             setDate(date);
+                            setValue('visit_date', moment(date).format('DD/MM/YYYY HH:mm A'))
                           }}
                           
                           onCancel={() => {
@@ -355,15 +391,16 @@ const CreateVisitScreen = () => {
                         />
                       </TouchableOpacity>
                     )}
-                    name="visitor_mobile"
+                    name="visit_date"
                   />
-                  {errors.visitor_mobile && (
+                  {errors.visit_date && (
                     <Text style={{color: 'red', marginBottom: 8}}>
-                      {errors.visitor_mobile.message}
+                      {errors.visit_date.message}
                     </Text>
                   )}
                 </View>
               </View>
+              </ScrollView>
             )}
             {formSteps == 1 && (
               <View>
@@ -375,6 +412,7 @@ const CreateVisitScreen = () => {
               </View>
             )}
             {formSteps == 2 && <View>
+                {/* ptm_name */}
                 <View className="mb-2">
                   <Text className="text-black mb-1">
                     Person To Meet Name <Text className="text-red-500">*</Text>{' '}
@@ -399,12 +437,13 @@ const CreateVisitScreen = () => {
                     )}
                     name="ptm_name"
                   />
-                  {errors.visitor_name && (
+                  {errors.ptm_name && (
                     <Text style={{color: 'red', marginBottom: 8}}>
-                      {errors.visitor_name.message}
+                      {errors.ptm_name.message}
                     </Text>
                   )}
                 </View>
+                {/* ptm_email */}
                 <View className="mb-2">
                   <Text className="text-black mb-1">
                     Person To Meet Email <Text className="text-red-500">*</Text>{' '}
@@ -426,14 +465,15 @@ const CreateVisitScreen = () => {
                         placeholderTextColor="gray"
                       />
                     )}
-                    name="email"
+                    name="ptm_email"
                   />
-                  {errors.email && (
+                  {errors.ptm_email && (
                     <Text style={{color: 'red', marginBottom: 8}}>
-                      {errors.email.message}
+                      {errors.ptm_email.message}
                     </Text>
                   )}
                 </View>
+                {/* ptm_mobile */}
                 <View className="mb-2">
                   <Text className="text-black mb-1">
                     Person To Meet Mobile <Text className="text-red-500">*</Text>{' '}
@@ -455,14 +495,15 @@ const CreateVisitScreen = () => {
                         placeholderTextColor="gray"
                       />
                     )}
-                    name="visitor_purpose"
+                    name="ptm_mobile"
                   />
-                  {errors.visitor_purpose && (
+                  {errors.ptm_mobile && (
                     <Text style={{color: 'red', marginBottom: 8}}>
-                      {errors.visitor_purpose.message}
+                      {errors.ptm_mobile.message}
                     </Text>
                   )}
                 </View>
+                {/* ptm_address */}
                 <View className="mb-2">
                   <Text className="text-black mb-1">
                     Person To Meet Address<Text className="text-red-500">*</Text>{' '}
@@ -484,13 +525,20 @@ const CreateVisitScreen = () => {
                         placeholderTextColor="gray"
                       />
                     )}
-                    name="visitor_mobile"
+                    name="ptm_address"
                   />
-                  {errors.visitor_mobile && (
+                  {errors.ptm_address && (
                     <Text style={{color: 'red', marginBottom: 8}}>
-                      {errors.visitor_mobile.message}
+                      {errors.ptm_address.message}
                     </Text>
                   )}
+                </View>
+                <View>
+                    <Button
+                        title='Save'
+                        color={color.primaryColor}
+                        onPress={handleSubmit(handleCreateVisit)}
+                    />
                 </View>
               </View>}
           </View>

@@ -1,4 +1,4 @@
-import {View, Text, Image, TextInput, Button, Touchable, TouchableOpacity} from 'react-native';
+import {View, Text, Image, TextInput, Button, Touchable, TouchableOpacity, ScrollView} from 'react-native';
 import React, {useEffect, useLayoutEffect, useState} from 'react';
 import {commonStyle, commonDarkStyle} from '../../style/style';
 import {Controller, useForm} from 'react-hook-form';
