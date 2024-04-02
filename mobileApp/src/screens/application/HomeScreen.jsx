@@ -79,7 +79,7 @@ const VisitCard = ({item}) => {
             className={`text-xs ${
               theme === 'dark' ? 'text-white/[0.7]' : 'text-green-400'
             }`}>
-            <Feather name="check" size={16} />{' '}
+            <Feather name="check" size={16} />
           </Text>
         </TouchableOpacity>
         <TouchableOpacity className="p-1 px-2">
@@ -87,7 +87,7 @@ const VisitCard = ({item}) => {
             className={`text-xs ${
               theme === 'dark' ? 'text-white/[0.7]' : 'text-red-500'
             }`}>
-            <Feather name="x" size={16} />{' '}
+            <Feather name="x" size={16} />
           </Text>
         </TouchableOpacity>
         <TouchableOpacity className="p-1 px-2">

@@ -14,6 +14,10 @@ import {launchImageLibrary} from 'react-native-image-picker';
 // library for file picker
 import DocumentPicker from 'react-native-document-picker';
 import RNFS from 'react-native-fs';
+import DatePicker from 'react-native-date-picker'
+import Feather from 'react-native-vector-icons/Feather';
+import moment from 'moment';
+
 
 const CreateVisitScreen = () => {
     const navigation = useNavigation();
@@ -30,7 +34,8 @@ const CreateVisitScreen = () => {
         });
     });
     const [selectedImage, setSelectedImage] = useState(null);
-
+    const [date, setDate] = useState(new Date())
+    const [open, setOpen] = useState(false)
 
     // 
     const handleCameraLaunch = () => {
@@ -124,194 +129,373 @@ const CreateVisitScreen = () => {
     });
 
     return (
-        <>
-            <View className="flex-1 p-4">
-                <View
-                    className="flex-row justify-between bg-white p-4 rounded-lg"
-                    style={{ elevation: 2 }}>
-                    <View className="flex-row items-center">
-                        <TouchableOpacity
-                            onPress={() => {
-                                setFormSteps(0);
-                            }}>
-                            <Text className="text-black text-xxl font-bold">Step 1</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <View className="flex-row items-center justify-center">
-                        <View
-                            className="h-1 w-14 rounded-sm"
-                            style={{ backgroundColor: color.secondaryColor }}></View>
-                        <TouchableOpacity
-                            onPress={() => {
-                                setFormSteps(1);
-                            }}>
-                            <Text className="text-black text-xxl font-bold px-5">Step 2</Text>
-                        </TouchableOpacity>
-                        <View
-                            className="h-1 w-14 rounded-sm"
-                            style={{ backgroundColor: color.secondaryColor }}></View>
-                    </View>
-                    <View className="flex-row items-center">
-                        <TouchableOpacity
-                            onPress={() => {
-                                setFormSteps(2);
-                            }}>
-                            <Text className="text-black text-xxl font-bold text-right">
-                                Step 3
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-                <View className="p-4 bg-white rounded-lg mt-4" style={{ elevation: 2 }}>
-                    {formSteps == 0 && (
-                        <View>
-                            <View className="mb-2">
-                                <Text className="text-black mb-1">Visitor's Name <Text className="text-red-500">*</Text> </Text>
-                                <Controller
-                                    control={control}
-                                    rules={{
-                                        required: true,
-                                    }}
-                                    render={({ field: { onChange, value } }) => (
-                                        <TextInput
-                                            style={{
-                                                ...defaultTheme.defaultTextInput,
-                                                ...defaultTheme.defaultMarginBottom,
-                                                ...defaultTheme.defaultColor,
-                                            }}
-                                            //   value={''}
-                                            onChangeText={onChange}
-                                            placeholder="Enter Visitor's Name"
-                                            placeholderTextColor="gray"
-                                        />
-                                    )}
-                                    name="visitor_name"
-                                />
-                                {errors.visitor_name && (
-                                    <Text style={{ color: 'red', marginBottom: 8 }}>
-                                        {errors.visitor_name.message}
-                                    </Text>
-                                )}
-                            </View>
-                            <View className="mb-2">
-                                <Text className="text-black mb-1">Visitor's Email <Text className="text-red-500">*</Text> </Text>
-                                <Controller
-                                    control={control}
-                                    rules={{
-                                        required: true,
-                                    }}
-                                    render={({ field: { onChange, value } }) => (
-                                        <TextInput
-                                            style={{
-                                                ...defaultTheme.defaultTextInput,
-                                                ...defaultTheme.defaultMarginBottom,
-                                                ...defaultTheme.defaultColor,
-                                            }}
-                                            onChangeText={onChange}
-                                            placeholder="Email"
-                                            placeholderTextColor="gray"
-                                        />
-                                    )}
-                                    name="email"
-                                />
-                                {errors.email && (
-                                    <Text style={{ color: 'red', marginBottom: 8 }}>
-                                        {errors.email.message}
-                                    </Text>
-                                )}
-                            </View>
-                            <View className="mb-2">
-                                <Text className="text-black mb-1">Visitor's Purpose <Text className="text-red-500">*</Text> </Text>
-                                <Controller
-                                    control={control}
-                                    rules={{
-                                        required: true,
-                                    }}
-                                    render={({ field: { onChange, value } }) => (
-                                        <TextInput
-                                            style={{
-                                                ...defaultTheme.defaultTextInput,
-                                                ...defaultTheme.defaultMarginBottom,
-                                                ...defaultTheme.defaultColor,
-                                            }}
-                                            onChangeText={onChange}
-                                            placeholder="Enter Visit Purpose..."
-                                            placeholderTextColor="gray"
-                                        />
-                                    )}
-                                    name="visitor_purpose"
-                                />
-                                {errors.visitor_purpose && (
-                                    <Text style={{ color: 'red', marginBottom: 8 }}>
-                                        {errors.visitor_purpose.message}
-                                    </Text>
-                                )}
-                            </View>
-                            <View className="mb-2">
-                                <Text className="text-black mb-1">Visitor's Mobile <Text className="text-red-500">*</Text> </Text>
-                                <Controller
-                                    control={control}
-                                    rules={{
-                                        required: true,
-                                    }}
-                                    render={({ field: { onChange, value } }) => (
-                                        <TextInput
-                                            style={{
-                                                ...defaultTheme.defaultTextInput,
-                                                ...defaultTheme.defaultMarginBottom,
-                                                ...defaultTheme.defaultColor,
-                                            }}
-                                            onChangeText={onChange}
-                                            placeholder="Enter Visitor's Mobile..."
-                                            placeholderTextColor="gray"
-                                        />
-                                    )}
-                                    name="visitor_mobile"
-                                />
-                                {errors.visitor_mobile && (
-                                    <Text style={{ color: 'red', marginBottom: 8 }}>
-                                        {errors.visitor_mobile.message}
-                                    </Text>
-                                )}
-                            </View>
-                            <View className="mb-2">
-                                <Text className="text-black mb-1">Visitor's Address <Text className="text-red-500">*</Text> </Text>
-                                <Controller
-                                    control={control}
-                                    rules={{
-                                        required: true,
-                                    }}
-                                    render={({ field: { onChange, value } }) => (
-                                        <TextInput
-                                            style={{
-                                                ...defaultTheme.defaultTextInput,
-                                                ...defaultTheme.defaultMarginBottom,
-                                                ...defaultTheme.defaultColor,
-                                            }}
-                                            onChangeText={onChange}
-                                            placeholder="Enter Visitor's Mobile..."
-                                            placeholderTextColor="gray"
-                                        />
-                                    )}
-                                    name="visitor_mobile"
-                                />
-                                {errors.visitor_mobile && (
-                                    <Text style={{ color: 'red', marginBottom: 8 }}>
-                                        {errors.visitor_mobile.message}
-                                    </Text>
-                                )}
-                            </View>
-                        </View>
-                    )}
-                    {formSteps == 1 &&
-                        <View>
-                            <Text className="text-black" onPress={()=>handleCameraLaunch()}>Open Camera</Text>
-                      </View>
-                    }
-                    {formSteps == 2 && <Text className="text-black">Step 3</Text>}
-                </View>
+      <>
+        <View className="flex-1 p-4">
+          <View
+            className="flex-row justify-between bg-white p-4 rounded-lg"
+            style={{elevation: 2}}>
+            <View className="flex-row items-center">
+              <TouchableOpacity
+                onPress={() => {
+                  setFormSteps(0);
+                }}>
+                <Text className="text-black text-xxl font-bold">Step 1</Text>
+              </TouchableOpacity>
             </View>
-        </>
+            <View className="flex-row items-center justify-center">
+              <View
+                className="h-1 w-14 rounded-sm"
+                style={{backgroundColor: color.secondaryColor}}></View>
+              <TouchableOpacity
+                onPress={() => {
+                  setFormSteps(1);
+                }}>
+                <Text className="text-black text-xxl font-bold px-5">
+                  Step 2
+                </Text>
+              </TouchableOpacity>
+              <View
+                className="h-1 w-14 rounded-sm"
+                style={{backgroundColor: color.secondaryColor}}></View>
+            </View>
+            <View className="flex-row items-center">
+              <TouchableOpacity
+                onPress={() => {
+                  setFormSteps(2);
+                }}>
+                <Text className="text-black text-xxl font-bold text-right">
+                  Step 3
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View className="p-4 bg-white rounded-lg mt-4" style={{elevation: 2}}>
+            {formSteps == 0 && (
+              <View>
+                <View className="mb-2">
+                  <Text className="text-black mb-1">
+                    Visitor's Name <Text className="text-red-500">*</Text>{' '}
+                  </Text>
+                  <Controller
+                    control={control}
+                    rules={{
+                      required: true,
+                    }}
+                    render={({field: {onChange, value}}) => (
+                      <TextInput
+                        style={{
+                          ...defaultTheme.defaultTextInput,
+                          ...defaultTheme.defaultMarginBottom,
+                          ...defaultTheme.defaultColor,
+                        }}
+                        //   value={''}
+                        onChangeText={onChange}
+                        placeholder="Enter Visitor's Name"
+                        placeholderTextColor="gray"
+                      />
+                    )}
+                    name="visitor_name"
+                  />
+                  {errors.visitor_name && (
+                    <Text style={{color: 'red', marginBottom: 8}}>
+                      {errors.visitor_name.message}
+                    </Text>
+                  )}
+                </View>
+                <View className="mb-2">
+                  <Text className="text-black mb-1">
+                    Visitor's Email <Text className="text-red-500">*</Text>{' '}
+                  </Text>
+                  <Controller
+                    control={control}
+                    rules={{
+                      required: true,
+                    }}
+                    render={({field: {onChange, value}}) => (
+                      <TextInput
+                        style={{
+                          ...defaultTheme.defaultTextInput,
+                          ...defaultTheme.defaultMarginBottom,
+                          ...defaultTheme.defaultColor,
+                        }}
+                        onChangeText={onChange}
+                        placeholder="Email"
+                        placeholderTextColor="gray"
+                      />
+                    )}
+                    name="email"
+                  />
+                  {errors.email && (
+                    <Text style={{color: 'red', marginBottom: 8}}>
+                      {errors.email.message}
+                    </Text>
+                  )}
+                </View>
+                <View className="mb-2">
+                  <Text className="text-black mb-1">
+                    Visitor's Purpose <Text className="text-red-500">*</Text>{' '}
+                  </Text>
+                  <Controller
+                    control={control}
+                    rules={{
+                      required: true,
+                    }}
+                    render={({field: {onChange, value}}) => (
+                      <TextInput
+                        style={{
+                          ...defaultTheme.defaultTextInput,
+                          ...defaultTheme.defaultMarginBottom,
+                          ...defaultTheme.defaultColor,
+                        }}
+                        onChangeText={onChange}
+                        placeholder="Enter Visit Purpose..."
+                        placeholderTextColor="gray"
+                      />
+                    )}
+                    name="visitor_purpose"
+                  />
+                  {errors.visitor_purpose && (
+                    <Text style={{color: 'red', marginBottom: 8}}>
+                      {errors.visitor_purpose.message}
+                    </Text>
+                  )}
+                </View>
+                <View className="mb-2">
+                  <Text className="text-black mb-1">
+                    Visitor's Mobile <Text className="text-red-500">*</Text>{' '}
+                  </Text>
+                  <Controller
+                    control={control}
+                    rules={{
+                      required: true,
+                    }}
+                    render={({field: {onChange, value}}) => (
+                      <TextInput
+                        style={{
+                          ...defaultTheme.defaultTextInput,
+                          ...defaultTheme.defaultMarginBottom,
+                          ...defaultTheme.defaultColor,
+                        }}
+                        onChangeText={onChange}
+                        placeholder="Enter Visitor's Mobile..."
+                        placeholderTextColor="gray"
+                      />
+                    )}
+                    name="visitor_mobile"
+                  />
+                  {errors.visitor_mobile && (
+                    <Text style={{color: 'red', marginBottom: 8}}>
+                      {errors.visitor_mobile.message}
+                    </Text>
+                  )}
+                </View>
+                <View className="mb-2">
+                  <Text className="text-black mb-1">
+                    Visitor's Address <Text className="text-red-500">*</Text>{' '}
+                  </Text>
+                  <Controller
+                    control={control}
+                    rules={{
+                      required: true,
+                    }}
+                    render={({field: {onChange, value}}) => (
+                      <TextInput
+                        style={{
+                          ...defaultTheme.defaultTextInput,
+                          ...defaultTheme.defaultMarginBottom,
+                          ...defaultTheme.defaultColor,
+                        }}
+                        onChangeText={onChange}
+                        placeholder="Enter Visitor's Mobile..."
+                        placeholderTextColor="gray"
+                      />
+                    )}
+                    name="visitor_mobile"
+                  />
+                  {errors.visitor_mobile && (
+                    <Text style={{color: 'red', marginBottom: 8}}>
+                      {errors.visitor_mobile.message}
+                    </Text>
+                  )}
+                </View>
+                <View className="mb-2">
+                  <Text className="text-black mb-1">
+                    Visit Date <Text className="text-red-500">*</Text>
+                  </Text>
+                  <Controller
+                    control={control}
+                    rules={{
+                      required: true,
+                    }}
+                    render={({field: {onChange, value}}) => (
+                      <TouchableOpacity className="flex-row justify-between" style={{ 
+                          ...defaultTheme.defaultTextInput,
+                          ...defaultTheme.defaultMarginBottom,
+                          ...defaultTheme.defaultColor,
+                          padding:14,
+                          paddingLeft:3,
+                          paddingRight:3,
+                       }}
+                       title="Open" onPress={() => setOpen(true)}
+                       >
+                        <Text>{moment(date).format('DD-MM-YYYY HH:mm A')}</Text>
+                        <Feather name="calendar" size={16}  />
+                        <DatePicker
+                          modal
+                          open={open}
+                          date={date}
+                          onConfirm={date => {
+                            setOpen(false);
+                            setDate(date);
+                          }}
+                          
+                          onCancel={() => {
+                            setOpen(false);
+                          }}
+                        />
+                      </TouchableOpacity>
+                    )}
+                    name="visitor_mobile"
+                  />
+                  {errors.visitor_mobile && (
+                    <Text style={{color: 'red', marginBottom: 8}}>
+                      {errors.visitor_mobile.message}
+                    </Text>
+                  )}
+                </View>
+              </View>
+            )}
+            {formSteps == 1 && (
+              <View>
+                <Text
+                  className="text-black"
+                  onPress={() => handleCameraLaunch()}>
+                  Open Camera
+                </Text>
+              </View>
+            )}
+            {formSteps == 2 && <View>
+                <View className="mb-2">
+                  <Text className="text-black mb-1">
+                    Person To Meet Name <Text className="text-red-500">*</Text>{' '}
+                  </Text>
+                  <Controller
+                    control={control}
+                    rules={{
+                      required: true,
+                    }}
+                    render={({field: {onChange, value}}) => (
+                      <TextInput
+                        style={{
+                          ...defaultTheme.defaultTextInput,
+                          ...defaultTheme.defaultMarginBottom,
+                          ...defaultTheme.defaultColor,
+                        }}
+                        //   value={''}
+                        onChangeText={onChange}
+                        placeholder="Enter Person To Meet Name"
+                        placeholderTextColor="gray"
+                      />
+                    )}
+                    name="ptm_name"
+                  />
+                  {errors.visitor_name && (
+                    <Text style={{color: 'red', marginBottom: 8}}>
+                      {errors.visitor_name.message}
+                    </Text>
+                  )}
+                </View>
+                <View className="mb-2">
+                  <Text className="text-black mb-1">
+                    Person To Meet Email <Text className="text-red-500">*</Text>{' '}
+                  </Text>
+                  <Controller
+                    control={control}
+                    rules={{
+                      required: true,
+                    }}
+                    render={({field: {onChange, value}}) => (
+                      <TextInput
+                        style={{
+                          ...defaultTheme.defaultTextInput,
+                          ...defaultTheme.defaultMarginBottom,
+                          ...defaultTheme.defaultColor,
+                        }}
+                        onChangeText={onChange}
+                        placeholder="Enter Person To Meet Email"
+                        placeholderTextColor="gray"
+                      />
+                    )}
+                    name="email"
+                  />
+                  {errors.email && (
+                    <Text style={{color: 'red', marginBottom: 8}}>
+                      {errors.email.message}
+                    </Text>
+                  )}
+                </View>
+                <View className="mb-2">
+                  <Text className="text-black mb-1">
+                    Person To Meet Mobile <Text className="text-red-500">*</Text>{' '}
+                  </Text>
+                  <Controller
+                    control={control}
+                    rules={{
+                      required: true,
+                    }}
+                    render={({field: {onChange, value}}) => (
+                      <TextInput
+                        style={{
+                          ...defaultTheme.defaultTextInput,
+                          ...defaultTheme.defaultMarginBottom,
+                          ...defaultTheme.defaultColor,
+                        }}
+                        onChangeText={onChange}
+                        placeholder="Enter Visit Purpose..."
+                        placeholderTextColor="gray"
+                      />
+                    )}
+                    name="visitor_purpose"
+                  />
+                  {errors.visitor_purpose && (
+                    <Text style={{color: 'red', marginBottom: 8}}>
+                      {errors.visitor_purpose.message}
+                    </Text>
+                  )}
+                </View>
+                <View className="mb-2">
+                  <Text className="text-black mb-1">
+                    Person To Meet Address<Text className="text-red-500">*</Text>{' '}
+                  </Text>
+                  <Controller
+                    control={control}
+                    rules={{
+                      required: true,
+                    }}
+                    render={({field: {onChange, value}}) => (
+                      <TextInput
+                        style={{
+                          ...defaultTheme.defaultTextInput,
+                          ...defaultTheme.defaultMarginBottom,
+                          ...defaultTheme.defaultColor,
+                        }}
+                        onChangeText={onChange}
+                        placeholder="Enter Visitor's Mobile..."
+                        placeholderTextColor="gray"
+                      />
+                    )}
+                    name="visitor_mobile"
+                  />
+                  {errors.visitor_mobile && (
+                    <Text style={{color: 'red', marginBottom: 8}}>
+                      {errors.visitor_mobile.message}
+                    </Text>
+                  )}
+                </View>
+              </View>}
+          </View>
+        </View>
+      </>
     );
 };
 
